@@ -44,44 +44,55 @@
   color: var(--text-secondary);
 }
 
-.points-table {
-  width: 100%;
-  border-collapse: collapse;
+.totals-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.total-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.875rem 1rem;
   background-color: var(--surface);
   border: 1px solid var(--border-soft);
   border-radius: 6px;
-  overflow: hidden;
 }
 
-.points-table thead {
-  background-color: var(--background);
-}
-
-.points-table th {
-  text-align: left;
-  padding: 0.75rem;
-  font-weight: 400;
-  color: var(--text-secondary);
-  border-bottom: 1px solid var(--border-soft);
-}
-
-.points-table td {
-  padding: 0.75rem;
-  border-bottom: 1px solid var(--border-soft);
-}
-
-.points-table tbody tr:last-child td {
-  border-bottom: none;
-}
-
-.points-table td.positive {
+.total-period {
   color: var(--text-primary);
-  font-weight: 500;
+  font-weight: 400;
 }
 
-.points-table td.negative {
+.total-value {
+  font-size: 1.1rem;
+  font-weight: 400;
+}
+
+.total-value.positive {
+  color: var(--text-primary);
+}
+
+.total-value.negative {
   color: var(--text-secondary);
-  font-weight: 500;
+}
+
+.patterns-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.pattern-statement {
+  padding: 0.875rem 1rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-style: italic;
+  margin: 0;
+  font-weight: 300;
 }
 
 .empty-state {

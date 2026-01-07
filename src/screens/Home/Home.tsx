@@ -18,7 +18,7 @@ export function Home() {
     day,
     activities.map(a => a.id)
   );
-  const todayPoints = calculateDayPoints(day);
+  const todayPoints = calculateDayPoints(day, activities);
 
   const handleResetDay = () => {
     if (confirm('Reset today\'s data? This cannot be undone.')) {
@@ -39,14 +39,24 @@ export function Home() {
         reflection: undefined,
         completed: false,
         activityPoints: undefined,
+        activityUnits: undefined,
+        activityIntentionality: undefined,
         intention: undefined,
       }));
+    }
+  };
+
+  const handleResetAll = () => {
+    if (confirm('Reset all data? This will delete everything. You can reset anytime. Nothing is permanent.')) {
+      localStorage.clear();
+      window.location.reload();
     }
   };
 
   return (
     <div className="home">
       <h1>Today</h1>
+      <p className="home-subtitle">Nobody sees you. You are your own witness.</p>
 
       {todayPoints !== 0 && (
         <div className="today-points">
@@ -82,10 +92,10 @@ export function Home() {
 
       <div className="home-actions">
         <button onClick={() => navigate('/progress')}>
-          Progress
+          Review
         </button>
         <button onClick={() => navigate('/activities')}>
-          Manage Habits
+          Activities
         </button>
         {(Object.keys(day.activityCounts ?? {}).length > 0) && (
           <button onClick={handleResetDay} className="secondary-button">
@@ -93,11 +103,17 @@ export function Home() {
           </button>
         )}
         {hasMorningSetup && (
-          <button onClick={handleDeleteDay} className="secondary-button">
-            Clear All Data
-          </button>
+          <>
+            <button onClick={handleDeleteDay} className="secondary-button">
+              Clear Today
+            </button>
+            <button onClick={handleResetAll} className="secondary-button">
+              Reset All
+            </button>
+          </>
         )}
       </div>
+      <p className="home-footer">You can reset anytime. Nothing is permanent.</p>
     </div>
   );
 }

@@ -2,6 +2,7 @@ import type { DayData } from '../day/day.types';
 import { loadDay } from './day.repository';
 import { calculateDayPoints } from '../day/day.points';
 import { getTodayDateString } from '../../utils/date';
+import { loadUserActivities } from '../activity/activity.storage';
 
 /**
  * Get all days from storage (limited to reasonable range)
@@ -32,6 +33,7 @@ export function getAllDays(): DayData[] {
  */
 export function getWeeklyPoints(): { week: string; points: number; days: number }[] {
   const days = getAllDays();
+  const activities = loadUserActivities();
   const weeks: Map<string, { points: number; days: number }> = new Map();
 
   days.forEach(day => {
@@ -41,7 +43,7 @@ export function getWeeklyPoints(): { week: string; points: number; days: number 
     const weekKey = getTodayDateString(weekStart);
     
     const existing = weeks.get(weekKey) ?? { points: 0, days: 0 };
-    existing.points += calculateDayPoints(day);
+    existing.points += calculateDayPoints(day, activities);
     existing.days += 1;
     weeks.set(weekKey, existing);
   });
@@ -57,13 +59,14 @@ export function getWeeklyPoints(): { week: string; points: number; days: number 
  */
 export function getMonthlyPoints(): { month: string; points: number; days: number }[] {
   const days = getAllDays();
+  const activities = loadUserActivities();
   const months: Map<string, { points: number; days: number }> = new Map();
 
   days.forEach(day => {
     const monthKey = day.date.substring(0, 7); // YYYY-MM
     
     const existing = months.get(monthKey) ?? { points: 0, days: 0 };
-    existing.points += calculateDayPoints(day);
+    existing.points += calculateDayPoints(day, activities);
     existing.days += 1;
     months.set(monthKey, existing);
   });

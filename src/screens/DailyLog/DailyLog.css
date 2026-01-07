@@ -33,7 +33,7 @@
 .activity-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 0.75rem;
 }
 
@@ -42,9 +42,65 @@
   color: var(--text-primary);
 }
 
+.activity-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+
 .points-per {
   font-size: 0.85rem;
   color: var(--text-secondary);
+}
+
+.intentionality-prompt {
+  background-color: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.prompt-question {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+  font-weight: 400;
+}
+
+.intentionality-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.intentionality-button {
+  flex: 1;
+  min-width: 100px;
+  padding: 0.625rem 1rem;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  background-color: var(--surface);
+  border: 1px solid var(--border-soft);
+  color: var(--text-primary);
+}
+
+.intentionality-button.intentional {
+  border-color: var(--border-soft);
+}
+
+.intentionality-button.automatic {
+  border-color: var(--border-soft);
+}
+
+.intentionality-button.cancel {
+  background-color: transparent;
+  color: var(--text-secondary);
+}
+
+.intentionality-button:hover {
+  background-color: var(--action-neutral-hover);
 }
 
 .counter-controls {

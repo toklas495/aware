@@ -63,9 +63,9 @@ export function ActivityManager() {
 
   return (
     <div className="activity-manager">
-      <h2>Your Habits</h2>
+      <h2>Your Activities</h2>
       <p className="manager-description">
-        Manage your good and bad habits. Good habits increase points, bad habits decrease them.
+        Define what matters to you. You decide what nourishes you and what drains you.
       </p>
 
       <div className="add-activity-section">

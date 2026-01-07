@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { getUserActivities } from '../../domain/activity/activity.config';
-import type { ActivityDefinition } from '../../domain/activity/activity.types';
+import type { ActivityDefinition, ActivityIntentionality } from '../../domain/activity/activity.types';
 import { useAppState } from '../../domain/state/useAppState';
 import { useDayState } from '../../domain/state/useDayState';
 import { getActivityPointValue, getActivityCount } from '../../domain/day/day.points';
@@ -12,6 +12,10 @@ export function DailyLog() {
   const { today } = useAppState();
   const { day, setDay, isLoaded } = useDayState(today);
   const [activities, setActivities] = useState<ActivityDefinition[]>([]);
+  const [pendingIntentionality, setPendingIntentionality] = useState<{
+    activityId: string;
+    intentionality: ActivityIntentionality | null;
+  } | null>(null);
 
   useEffect(() => {
     setActivities(getUserActivities());
@@ -35,17 +39,40 @@ export function DailyLog() {
   }
 
   const handleIncrement = (activityId: string) => {
+    // Show intentionality prompt first
+    setPendingIntentionality({
+      activityId,
+      intentionality: null,
+    });
+  };
+
+  const handleConfirmIncrement = (intentionality: ActivityIntentionality) => {
+    if (!pendingIntentionality) return;
+
+    const { activityId } = pendingIntentionality;
     setDay(prev => {
       if (!prev) return prev;
       const currentCount = prev.activityCounts?.[activityId] ?? 0;
+      const currentIntentionality = prev.activityIntentionality?.[activityId] ?? [];
+
       return {
         ...prev,
         activityCounts: {
           ...(prev.activityCounts ?? {}),
           [activityId]: currentCount + 1,
         },
+        activityIntentionality: {
+          ...(prev.activityIntentionality ?? {}),
+          [activityId]: [...currentIntentionality, intentionality],
+        },
       };
     });
+
+    setPendingIntentionality(null);
+  };
+
+  const handleCancelIncrement = () => {
+    setPendingIntentionality(null);
   };
 
   const handleDecrement = (activityId: string) => {
@@ -53,113 +80,115 @@ export function DailyLog() {
       if (!prev) return prev;
       const currentCount = prev.activityCounts?.[activityId] ?? 0;
       if (currentCount <= 0) return prev;
+
+      // Remove last intentionality entry when decrementing
+      const currentIntentionality = prev.activityIntentionality?.[activityId] ?? [];
+      const newIntentionality = currentIntentionality.slice(0, -1);
+
+      const updatedIntentionality = { ...(prev.activityIntentionality ?? {}) };
+      if (newIntentionality.length === 0) {
+        delete updatedIntentionality[activityId];
+      } else {
+        updatedIntentionality[activityId] = newIntentionality;
+      }
+
       return {
         ...prev,
         activityCounts: {
           ...(prev.activityCounts ?? {}),
           [activityId]: currentCount - 1,
         },
+        activityIntentionality: Object.keys(updatedIntentionality).length > 0
+          ? updatedIntentionality
+          : undefined,
       };
     });
   };
 
-  const goodHabits = activities.filter(a => a.type === 'good');
-  const badHabits = activities.filter(a => a.type === 'bad');
+  const renderActivity = (activity: ActivityDefinition) => {
+    const count = getActivityCount(day, activity.id);
+    const pointsPerActivity = getActivityPointValue(day, activity.id, activity);
+    const totalPoints = count * pointsPerActivity;
+    const unit = day.activityUnits?.[activity.id] ?? activity.unit ?? '';
+    const isPending = pendingIntentionality?.activityId === activity.id;
+
+    return (
+      <div key={activity.id} className={`activity-counter ${activity.type === 'bad' ? 'bad-habit' : ''}`}>
+        <div className="activity-header">
+          <span className="activity-name">{activity.label}</span>
+          <div className="activity-meta">
+            {pointsPerActivity !== 0 && (
+              <span className="points-per">
+                {pointsPerActivity > 0 ? '+' : ''}{pointsPerActivity}
+                {unit && ` per ${unit}`}
+              </span>
+            )}
+          </div>
+        </div>
+
+        {isPending && (
+          <div className="intentionality-prompt">
+            <p className="prompt-question">Was this a choice or a habit?</p>
+            <div className="intentionality-buttons">
+              <button
+                onClick={() => handleConfirmIncrement('intentional')}
+                className="intentionality-button intentional"
+              >
+                Intentional
+              </button>
+              <button
+                onClick={() => handleConfirmIncrement('automatic')}
+                className="intentionality-button automatic"
+              >
+                Automatic
+              </button>
+              <button
+                onClick={handleCancelIncrement}
+                className="intentionality-button cancel"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
+
+        <div className="counter-controls">
+          <button
+            onClick={() => handleDecrement(activity.id)}
+            className="counter-button"
+            disabled={count === 0 || isPending}
+          >
+            −
+          </button>
+          <span className="count-display">
+            {count}
+            {unit && count > 0 && ` ${unit}`}
+          </span>
+          <button
+            onClick={() => handleIncrement(activity.id)}
+            className="counter-button"
+            disabled={isPending}
+          >
+            +
+          </button>
+        </div>
+        {count > 0 && (
+          <div className={`activity-total ${activity.type === 'bad' ? 'bad-total' : ''}`}>
+            Total: {totalPoints > 0 ? '+' : ''}{totalPoints} points
+          </div>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div className="daily-log">
       <h2>Track Your Day</h2>
-      <p className="log-description">Tap to increment. Each time you do a habit, press the button.</p>
+      <p className="log-description">Each time you do an activity, log it consciously.</p>
 
-      {goodHabits.length > 0 && (
-        <div className="habits-section">
-          <h3>Good Habits</h3>
-          <div className="activity-list">
-            {goodHabits.map(activity => {
-              const count = getActivityCount(day, activity.id);
-              const pointsPerActivity = getActivityPointValue(day, activity.id);
-              const totalPoints = count * pointsPerActivity;
-              
-              return (
-                <div key={activity.id} className="activity-counter">
-                  <div className="activity-header">
-                    <span className="activity-name">{activity.label}</span>
-                    {pointsPerActivity !== 0 && (
-                      <span className="points-per">+{pointsPerActivity} per</span>
-                    )}
-                  </div>
-                  <div className="counter-controls">
-                    <button
-                      onClick={() => handleDecrement(activity.id)}
-                      className="counter-button"
-                      disabled={count === 0}
-                    >
-                      −
-                    </button>
-                    <span className="count-display">{count}</span>
-                    <button
-                      onClick={() => handleIncrement(activity.id)}
-                      className="counter-button"
-                    >
-                      +
-                    </button>
-                  </div>
-                  {count > 0 && (
-                    <div className="activity-total">
-                      Total: +{totalPoints} points
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
-      {badHabits.length > 0 && (
-        <div className="habits-section">
-          <h3>Bad Habits</h3>
-          <div className="activity-list">
-            {badHabits.map(activity => {
-              const count = getActivityCount(day, activity.id);
-              const pointsPerActivity = getActivityPointValue(day, activity.id);
-              const totalPoints = count * pointsPerActivity;
-              
-              return (
-                <div key={activity.id} className="activity-counter bad-habit">
-                  <div className="activity-header">
-                    <span className="activity-name">{activity.label}</span>
-                    {pointsPerActivity !== 0 && (
-                      <span className="points-per">{pointsPerActivity} per</span>
-                    )}
-                  </div>
-                  <div className="counter-controls">
-                    <button
-                      onClick={() => handleDecrement(activity.id)}
-                      className="counter-button"
-                      disabled={count === 0}
-                    >
-                      −
-                    </button>
-                    <span className="count-display">{count}</span>
-                    <button
-                      onClick={() => handleIncrement(activity.id)}
-                      className="counter-button"
-                    >
-                      +
-                    </button>
-                  </div>
-                  {count > 0 && (
-                    <div className="activity-total bad-total">
-                      Total: {totalPoints} points
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
+      <div className="activity-list">
+        {activities.map(renderActivity)}
+      </div>
 
       <div className="daily-log-actions">
         <button onClick={() => navigate('/')}>Back</button>

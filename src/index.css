@@ -1,13 +1,44 @@
-/* App-wide small adjustments only */
+/* App-wide adjustments - calm, minimal */
 
 button {
   background-color: var(--surface);
   border: 1px solid var(--border-soft);
   color: var(--text-primary);
+  padding: 0.75rem 1.25rem;
+  font-weight: 400;
+  transition: all 0.2s ease;
 }
 
 button:hover {
   background-color: var(--action-neutral-hover);
+  border-color: var(--border-soft);
+}
+
+button.primary-button {
+  background-color: var(--primary-button-bg);
+  color: var(--primary-button-text);
+  border-color: var(--primary-button-bg);
+}
+
+button.primary-button:hover {
+  background-color: var(--primary-button-hover);
+  border-color: var(--primary-button-hover);
+}
+
+button.secondary-button {
+  background-color: transparent;
+  color: var(--text-secondary);
+  border-color: var(--border-soft);
+}
+
+button.secondary-button:hover {
+  background-color: var(--action-neutral);
+  color: var(--text-primary);
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 textarea,

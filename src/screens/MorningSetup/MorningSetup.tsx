@@ -20,6 +20,7 @@ export function MorningSetup() {
   if (!isLoaded || !day) return null;
 
   const activityPoints = day.activityPoints ?? {};
+  const activityUnits = day.activityUnits ?? {};
 
   if (activities.length === 0) {
     return (
@@ -57,6 +58,22 @@ export function MorningSetup() {
     });
   };
 
+  const handleUnitChange = (activityId: ActivityId, value: string) => {
+    setDay(prev => {
+      if (!prev) return prev;
+      const newUnits = { ...(prev.activityUnits ?? {}) };
+      if (!value.trim()) {
+        delete newUnits[activityId];
+      } else {
+        newUnits[activityId] = value.trim();
+      }
+      return {
+        ...prev,
+        activityUnits: Object.keys(newUnits).length > 0 ? newUnits : undefined,
+      };
+    });
+  };
+
   const handleIntentionChange = (value: string) => {
     setDay(prev => ({
       ...prev!,
@@ -72,7 +89,10 @@ export function MorningSetup() {
     <div className="morning-setup">
       <h2>Morning Setup</h2>
       <p className="setup-description">
-        Assign points to each activity for today. These values help you reflect on your choices.
+        You decide what nourishes you and what drains you.
+      </p>
+      <p className="setup-hint">
+        Assign point values to each activity. Optional: add a unit (km, minutes, sessions).
       </p>
 
       <div className="intention-section">
@@ -88,35 +108,28 @@ export function MorningSetup() {
 
       <div className="activity-points-list">
         <div className="points-section">
-          <h3>Good Habits</h3>
-          <p className="section-hint">Positive points (e.g., +5 for meditation)</p>
-          {activities.filter(a => a.type === 'good').map(activity => (
+          <h3>Activities</h3>
+          {activities.map(activity => (
             <div key={activity.id} className="activity-point-input">
               <label htmlFor={`points-${activity.id}`}>{activity.label}</label>
-              <input
-                id={`points-${activity.id}`}
-                type="number"
-                placeholder="+5"
-                value={activityPoints[activity.id] ?? ''}
-                onChange={e => handlePointChange(activity.id, e.target.value)}
-              />
-            </div>
-          ))}
-        </div>
-
-        <div className="points-section">
-          <h3>Bad Habits</h3>
-          <p className="section-hint">Negative points (e.g., -5 for masturbation)</p>
-          {activities.filter(a => a.type === 'bad').map(activity => (
-            <div key={activity.id} className="activity-point-input">
-              <label htmlFor={`points-${activity.id}`}>{activity.label}</label>
-              <input
-                id={`points-${activity.id}`}
-                type="number"
-                placeholder="-5"
-                value={activityPoints[activity.id] ?? ''}
-                onChange={e => handlePointChange(activity.id, e.target.value)}
-              />
+              <div className="point-input-row">
+                <input
+                  id={`points-${activity.id}`}
+                  type="number"
+                  placeholder={activity.type === 'good' ? '+5' : '-5'}
+                  value={activityPoints[activity.id] ?? activity.points ?? ''}
+                  onChange={e => handlePointChange(activity.id, e.target.value)}
+                  className="points-input"
+                />
+                <input
+                  id={`unit-${activity.id}`}
+                  type="text"
+                  placeholder="unit (optional)"
+                  value={activityUnits[activity.id] ?? activity.unit ?? ''}
+                  onChange={e => handleUnitChange(activity.id, e.target.value)}
+                  className="unit-input"
+                />
+              </div>
             </div>
           ))}
         </div>

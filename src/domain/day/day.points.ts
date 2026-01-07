@@ -1,24 +1,43 @@
 import type { DayData } from './day.types';
-import type { ActivityId } from '../activity/activity.types';
+import type { ActivityId, ActivityDefinition } from '../activity/activity.types';
+
+/**
+ * Get points per activity (not total, just the point value)
+ * Checks day-specific points first, then falls back to activity default
+ */
+export function getActivityPointValue(
+  day: DayData,
+  activityId: ActivityId,
+  activity?: ActivityDefinition
+): number {
+  // Day-specific points take precedence
+  if (day.activityPoints?.[activityId] !== undefined) {
+    return day.activityPoints[activityId];
+  }
+  // Fall back to activity default
+  if (activity?.points !== undefined) {
+    return activity.points;
+  }
+  return 0;
+}
 
 /**
  * Calculate total points for a day based on activity counts and their assigned points
  * Points = count * points_per_activity
  */
-export function calculateDayPoints(day: DayData): number {
-  if (!day.activityPoints || !day.activityCounts) return 0;
+export function calculateDayPoints(
+  day: DayData,
+  activities: ActivityDefinition[] = []
+): number {
+  if (!day.activityCounts) return 0;
+
+  const activityMap = new Map(activities.map(a => [a.id, a]));
 
   return Object.entries(day.activityCounts).reduce((total, [activityId, count]) => {
-    const pointsPerActivity = day.activityPoints![activityId] ?? 0;
+    const activity = activityMap.get(activityId);
+    const pointsPerActivity = getActivityPointValue(day, activityId, activity);
     return total + (count * pointsPerActivity);
   }, 0);
-}
-
-/**
- * Get points per activity (not total, just the point value)
- */
-export function getActivityPointValue(day: DayData, activityId: ActivityId): number {
-  return day.activityPoints?.[activityId] ?? 0;
 }
 
 /**
@@ -42,14 +61,14 @@ export function isMorningSetupComplete(
 /**
  * Get total points from good habits only
  */
-export function getGoodHabitsPoints(day: DayData, activities: Array<{ id: ActivityId; type: string }>): number {
-  if (!day.activityPoints || !day.activityCounts) return 0;
+export function getGoodHabitsPoints(day: DayData, activities: ActivityDefinition[]): number {
+  if (!day.activityCounts) return 0;
   
   return activities
     .filter(a => a.type === 'good')
     .reduce((total, activity) => {
-      const count = day.activityCounts[activity.id] ?? 0;
-      const pointsPerActivity = day.activityPoints![activity.id] ?? 0;
+      const count = day.activityCounts![activity.id] ?? 0;
+      const pointsPerActivity = getActivityPointValue(day, activity.id, activity);
       return total + (count * pointsPerActivity);
     }, 0);
 }
@@ -57,14 +76,14 @@ export function getGoodHabitsPoints(day: DayData, activities: Array<{ id: Activi
 /**
  * Get total points from bad habits only (will be negative)
  */
-export function getBadHabitsPoints(day: DayData, activities: Array<{ id: ActivityId; type: string }>): number {
-  if (!day.activityPoints || !day.activityCounts) return 0;
+export function getBadHabitsPoints(day: DayData, activities: ActivityDefinition[]): number {
+  if (!day.activityCounts) return 0;
   
   return activities
     .filter(a => a.type === 'bad')
     .reduce((total, activity) => {
-      const count = day.activityCounts[activity.id] ?? 0;
-      const pointsPerActivity = day.activityPoints![activity.id] ?? 0;
+      const count = day.activityCounts![activity.id] ?? 0;
+      const pointsPerActivity = getActivityPointValue(day, activity.id, activity);
       return total + (count * pointsPerActivity);
     }, 0);
 }

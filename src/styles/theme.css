@@ -1,12 +1,45 @@
-:root {
+/* Light theme */
+:root,
+[data-theme="light"] {
   --background: #fafafa;
   --surface: #ffffff;
 
-  --text-primary: #222222;
+  --text-primary: #1a1a1a;
   --text-secondary: #666666;
+  --text-tertiary: #999999;
 
   --border-soft: #e5e5e5;
+  --border-subtle: #f0f0f0;
 
-  --action-neutral: #dddddd;
-  --action-neutral-hover: #cccccc;
+  --action-neutral: #e8e8e8;
+  --action-neutral-hover: #d0d0d0;
+  
+  --primary-button-bg: #1a1a1a;
+  --primary-button-text: #fafafa;
+  --primary-button-hover: #333333;
+}
+
+/* Dark theme - eye-friendly, deep, soft */
+[data-theme="dark"] {
+  --background: #0a0a0a;
+  --surface: #151515;
+
+  --text-primary: #e5e5e5;
+  --text-secondary: #999999;
+  --text-tertiary: #666666;
+
+  --border-soft: #2a2a2a;
+  --border-subtle: #1f1f1f;
+
+  --action-neutral: #252525;
+  --action-neutral-hover: #333333;
+  
+  --primary-button-bg: #e5e5e5;
+  --primary-button-text: #0a0a0a;
+  --primary-button-hover: #cccccc;
+}
+
+/* Smooth transitions */
+* {
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }

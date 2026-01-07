@@ -4,6 +4,22 @@
 
 .home h1 {
   font-weight: 400;
+  margin-bottom: 0.5rem;
+}
+
+.home-subtitle {
+  color: var(--text-secondary);
+  font-style: italic;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.home-footer {
+  margin-top: 2rem;
+  color: var(--text-tertiary);
+  font-size: 0.85rem;
+  font-style: italic;
+  text-align: center;
 }
 
 .today-points {

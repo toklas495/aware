@@ -1,13 +1,19 @@
 {
   "name": "aware",
   "private": true,
-  "version": "0.0.0",
+  "version": "2.0.0",
   "type": "module",
+  "description": "A privacy-first, self-awareness tracking application",
+  "author": "",
+  "license": "MIT",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "docker:build": "docker build -t aware .",
+    "docker:run": "docker run -d -p 8080:80 --name aware-app aware",
+    "docker:stop": "docker stop aware-app && docker rm aware-app"
   },
   "dependencies": {
     "react": "^19.2.3",
