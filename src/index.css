@@ -1,0 +1,43 @@
+/* App-wide small adjustments only */
+
+button {
+  background-color: var(--surface);
+  border: 1px solid var(--border-soft);
+  color: var(--text-primary);
+}
+
+button:hover {
+  background-color: var(--action-neutral-hover);
+}
+
+textarea,
+input {
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  padding: 0.6rem;
+  background-color: var(--surface);
+  color: var(--text-primary);
+}
+
+textarea::placeholder,
+input::placeholder {
+  color: var(--text-secondary);
+}
+
+/* Disable aggressive focus outlines but keep accessibility */
+:focus {
+  outline-color: #999;
+}
+
+/* Mobile touch targets */
+@media (max-width: 480px) {
+  button {
+    min-height: 44px; /* iOS recommended touch target */
+    padding: 0.75rem 1rem;
+  }
+
+  input,
+  textarea {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+}

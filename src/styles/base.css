@@ -1,0 +1,35 @@
+/* Base reset */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+/* Typography */
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, Ubuntu, sans-serif;
+
+  font-size: 16px;
+  line-height: 1.6;
+
+  color: var(--text-primary);
+  background-color: var(--background);
+}
+
+/* Inputs inherit calm text */
+input,
+textarea,
+button {
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+/* Remove aggressive defaults */
+button {
+  cursor: pointer;
+  border-radius: 6px;
+}

@@ -1,0 +1,129 @@
+.progress-summary {
+  padding: 2rem;
+}
+
+.summary-section {
+  margin-bottom: 2rem;
+}
+
+.summary-section h3 {
+  font-weight: 400;
+  margin-bottom: 1rem;
+}
+
+.points-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+}
+
+.points-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.points-label {
+  color: var(--text-secondary);
+}
+
+.points-value {
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.points-value.positive {
+  color: var(--text-primary);
+}
+
+.points-value.negative {
+  color: var(--text-secondary);
+}
+
+.points-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.points-table thead {
+  background-color: var(--background);
+}
+
+.points-table th {
+  text-align: left;
+  padding: 0.75rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.points-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.points-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.points-table td.positive {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.points-table td.negative {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.empty-state {
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.summary-actions {
+  margin-top: 2rem;
+}
+
+.summary-actions button {
+  padding: 0.75rem 1.5rem;
+}
+
+/* Mobile responsive */
+@media (max-width: 480px) {
+  .progress-summary {
+    padding: 1rem 0.75rem;
+  }
+
+  .points-value {
+    font-size: 1.5rem;
+  }
+
+  .points-table {
+    font-size: 0.9rem;
+  }
+
+  .points-table th,
+  .points-table td {
+    padding: 0.5rem;
+  }
+
+  .points-table th:first-child,
+  .points-table td:first-child {
+    padding-left: 0.75rem;
+  }
+
+  .points-table th:last-child,
+  .points-table td:last-child {
+    padding-right: 0.75rem;
+  }
+}
+

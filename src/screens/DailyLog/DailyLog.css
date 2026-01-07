@@ -1,0 +1,156 @@
+.daily-log {
+  padding: 2rem;
+}
+
+.log-description {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.habits-section {
+  margin-bottom: 2rem;
+}
+
+.habits-section h3 {
+  font-weight: 400;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.activity-counter {
+  background-color: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.activity-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.activity-name {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.points-per {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.counter-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.counter-button {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--border-soft);
+  background-color: var(--surface);
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.counter-button:hover:not(:disabled) {
+  background-color: var(--action-neutral-hover);
+}
+
+.counter-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.count-display {
+  font-size: 1.5rem;
+  font-weight: 500;
+  min-width: 60px;
+  text-align: center;
+  color: var(--text-primary);
+}
+
+.activity-total {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-top: 0.5rem;
+}
+
+.bad-habit {
+  border-color: var(--border-soft);
+}
+
+.bad-total {
+  color: var(--text-secondary);
+}
+
+.daily-log-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.daily-log-actions button {
+  flex: 1;
+  padding: 0.75rem;
+}
+
+.primary-button {
+  background-color: var(--text-primary);
+  color: var(--surface);
+  border: none;
+}
+
+.primary-button:hover {
+  background-color: var(--text-secondary);
+}
+
+.empty-state {
+  color: var(--text-secondary);
+  text-align: center;
+  padding: 2rem;
+}
+
+/* Mobile responsive */
+@media (max-width: 480px) {
+  .daily-log {
+    padding: 1rem 0.75rem;
+  }
+
+  .activity-counter {
+    padding: 0.875rem;
+  }
+
+  .counter-button {
+    width: 40px;
+    height: 40px;
+    font-size: 1.25rem;
+  }
+
+  .count-display {
+    font-size: 1.25rem;
+    min-width: 50px;
+  }
+
+  .daily-log-actions {
+    flex-direction: column;
+  }
+}

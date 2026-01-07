@@ -1,0 +1,139 @@
+.reflection {
+  padding: 2rem;
+}
+
+.reflection-summary {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+}
+
+.points-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.points-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.points-label {
+  color: var(--text-secondary);
+}
+
+.points-value {
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.points-value.positive {
+  color: var(--text-primary);
+}
+
+.points-value.negative {
+  color: var(--text-secondary);
+}
+
+.choices-section {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+}
+
+.choices-section h3 {
+  font-weight: 400;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.choices-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.choice-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.choice-item:last-child {
+  border-bottom: none;
+}
+
+.choice-name {
+  color: var(--text-primary);
+}
+
+.choice-count {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.empty-reflection {
+  color: var(--text-secondary);
+  text-align: center;
+  padding: 2rem;
+  font-style: italic;
+}
+
+.reflection-notes {
+  margin-bottom: 2rem;
+}
+
+.reflection-notes textarea {
+  width: 100%;
+  min-height: 4rem;
+  margin-bottom: 1rem;
+}
+
+.reflection-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.reflection-actions button {
+  flex: 1;
+  padding: 0.75rem;
+}
+
+.reflection-actions .primary-button {
+  background-color: var(--text-primary);
+  color: var(--surface);
+  border: none;
+}
+
+.reflection-actions .primary-button:hover {
+  background-color: var(--text-secondary);
+}
+
+/* Mobile responsive */
+@media (max-width: 480px) {
+  .reflection {
+    padding: 1rem 0.75rem;
+  }
+
+  .reflection textarea {
+    min-height: 3.5rem;
+    font-size: 0.95rem;
+  }
+
+  .reflection-actions {
+    flex-direction: column;
+  }
+
+  .reflection-actions button {
+    width: 100%;
+  }
+}

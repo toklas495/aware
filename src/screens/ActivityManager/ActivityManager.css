@@ -1,0 +1,201 @@
+.activity-manager {
+  padding: 1.5rem;
+}
+
+.manager-description {
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+}
+
+.add-activity-section {
+  margin-bottom: 2rem;
+}
+
+.add-activity-input {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.add-activity-input input {
+  flex: 1;
+  min-width: 150px;
+  padding: 0.75rem;
+}
+
+.type-select {
+  padding: 0.75rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  color: var(--text-primary);
+}
+
+.add-button {
+  padding: 0.75rem 1.5rem;
+  background-color: var(--text-primary);
+  color: var(--surface);
+  border: none;
+  white-space: nowrap;
+}
+
+.add-button:hover {
+  background-color: var(--text-secondary);
+}
+
+.activities-sections {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.activity-section h3 {
+  font-weight: 400;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.activity-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+}
+
+.activity-label {
+  flex: 1;
+  color: var(--text-primary);
+}
+
+.activity-good {
+  color: var(--text-primary);
+}
+
+.activity-bad {
+  color: var(--text-secondary);
+}
+
+.type-select-small {
+  padding: 0.5rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.activity-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.edit-button,
+.delete-button {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+.delete-button {
+  background-color: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-soft);
+}
+
+.delete-button:hover {
+  background-color: var(--action-neutral-hover);
+  color: var(--text-primary);
+}
+
+.activity-edit {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+  align-items: center;
+}
+
+.activity-edit input {
+  flex: 1;
+  padding: 0.5rem;
+}
+
+.save-button,
+.cancel-button {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.save-button {
+  background-color: var(--text-primary);
+  color: var(--surface);
+  border: none;
+}
+
+.save-button:hover {
+  background-color: var(--text-secondary);
+}
+
+.cancel-button {
+  background-color: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-soft);
+}
+
+.empty-state {
+  color: var(--text-secondary);
+  font-style: italic;
+  text-align: center;
+  padding: 2rem;
+}
+
+.manager-actions {
+  margin-top: 2rem;
+}
+
+.manager-actions button {
+  padding: 0.75rem 1.5rem;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .activities-sections {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .activity-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .activity-actions {
+    justify-content: flex-end;
+  }
+
+  .activity-edit {
+    flex-wrap: wrap;
+  }
+
+  .activity-edit input {
+    width: 100%;
+  }
+
+  .add-activity-input {
+    flex-direction: column;
+  }
+
+  .add-activity-input input,
+  .add-activity-input select,
+  .add-activity-input button {
+    width: 100%;
+  }
+}
+

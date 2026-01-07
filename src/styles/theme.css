@@ -1,0 +1,12 @@
+:root {
+  --background: #fafafa;
+  --surface: #ffffff;
+
+  --text-primary: #222222;
+  --text-secondary: #666666;
+
+  --border-soft: #e5e5e5;
+
+  --action-neutral: #dddddd;
+  --action-neutral-hover: #cccccc;
+}
