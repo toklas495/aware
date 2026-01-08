@@ -8,31 +8,70 @@ html, body {
   padding: 0;
 }
 
-/* Typography - softer, calmer */
+/* Typography - Professional, readable */
 body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, Ubuntu, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, 
+               "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
+               "Segoe UI Emoji", "Segoe UI Symbol";
 
   font-size: 16px;
-  line-height: 1.7;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
 
   color: var(--text-primary);
   background-color: var(--background);
   font-weight: 400;
+  
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
-/* Inputs inherit calm text */
+/* Typography hierarchy */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  margin: 0;
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+h3 {
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+/* Inputs inherit professional styling */
 input,
 textarea,
-button {
+button,
+select {
   font-family: inherit;
   font-size: 1rem;
+  line-height: 1.5;
 }
 
-/* Remove aggressive defaults */
+/* Button base */
 button {
   cursor: pointer;
-  border-radius: 6px;
+  border-radius: 8px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  outline: none;
+  position: relative;
+  overflow: hidden;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--primary-button-bg);
+  outline-offset: 2px;
 }

@@ -5,6 +5,7 @@ import { useDayState } from '../../domain/state/useDayState';
 import { getUserActivities } from '../../domain/activity/activity.config';
 import type { ActivityId } from '../../domain/activity/activity.types';
 import type { ActivityDefinition } from '../../domain/activity/activity.types';
+import { AppHeader } from '../../components/AppHeader';
 import './MorningSetup.css';
 
 export function MorningSetup() {
@@ -87,6 +88,7 @@ export function MorningSetup() {
 
   return (
     <div className="morning-setup">
+      <AppHeader />
       <h2>Morning Setup</h2>
       <p className="setup-description">
         You decide what nourishes you and what drains you.
@@ -136,7 +138,6 @@ export function MorningSetup() {
       </div>
 
       <div className="setup-actions">
-        <button onClick={() => navigate('/')}>Back</button>
         <button onClick={handleComplete} className="primary-button">
           Begin the day
         </button>

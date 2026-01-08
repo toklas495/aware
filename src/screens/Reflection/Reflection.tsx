@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useAppState } from '../../domain/state/useAppState';
 import { useDayState } from '../../domain/state/useDayState';
+import { AppHeader } from '../../components/AppHeader';
 import './Reflection.css';
 
 export function Reflection() {
@@ -24,6 +25,7 @@ export function Reflection() {
 
   return (
     <div className="reflection">
+      <AppHeader />
       <h2>Night Reflection</h2>
       <p className="reflection-intro">
         Nobody sees you. You are your own witness.
@@ -92,7 +94,6 @@ export function Reflection() {
       </div>
 
       <div className="reflection-actions">
-        <button onClick={() => navigate('/')}>Back</button>
         <button onClick={handleComplete} className="primary-button">
           Close the day
         </button>

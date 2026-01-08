@@ -1,14 +1,22 @@
 .activity-manager {
-  padding: 1.5rem;
+  padding: 0;
+}
+
+.activity-manager > h2 {
+  padding: 1.5rem 2rem 0.75rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
 }
 
 .manager-description {
   color: var(--text-secondary);
   margin-bottom: 2rem;
+  padding: 0 2rem;
 }
 
 .add-activity-section {
   margin-bottom: 2rem;
+  padding: 0 2rem;
 }
 
 .add-activity-input {
@@ -48,6 +56,7 @@
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
   margin-bottom: 2rem;
+  padding: 0 2rem;
 }
 
 .activity-section h3 {
@@ -60,11 +69,18 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.75rem;
-  margin-bottom: 0.5rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 0.75rem;
   background-color: var(--surface);
   border: 1px solid var(--border-soft);
-  border-radius: 6px;
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.activity-item:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-strong);
 }
 
 .activity-label {

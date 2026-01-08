@@ -1,9 +1,16 @@
 .progress-summary {
-  padding: 2rem;
+  padding: 0;
+}
+
+.progress-summary > h2 {
+  padding: 1.5rem 2rem 0.75rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
 }
 
 .summary-section {
   margin-bottom: 2rem;
+  padding: 0 2rem;
 }
 
 .summary-section h3 {
@@ -54,10 +61,18 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.875rem 1rem;
+  padding: 1rem 1.25rem;
   background-color: var(--surface);
   border: 1px solid var(--border-soft);
-  border-radius: 6px;
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.total-item:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-strong);
+  transform: translateY(-1px);
 }
 
 .total-period {

@@ -1,10 +1,23 @@
 .daily-log {
-  padding: 2rem;
+  padding: 0;
+}
+
+.daily-log > h2 {
+  padding: 1.5rem 2rem 0.75rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
 }
 
 .log-description {
   color: var(--text-secondary);
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  padding: 0 2rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.activity-list {
+  padding: 0 2rem 2rem;
 }
 
 .habits-section {
@@ -26,8 +39,15 @@
 .activity-counter {
   background-color: var(--surface);
   border: 1px solid var(--border-soft);
-  border-radius: 8px;
-  padding: 1rem;
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.activity-counter:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-strong);
 }
 
 .activity-header {
@@ -55,11 +75,12 @@
 }
 
 .intentionality-prompt {
-  background-color: var(--surface);
+  background-color: var(--surface-elevated);
   border: 1px solid var(--border-soft);
-  border-radius: 6px;
-  padding: 1rem;
-  margin-bottom: 0.75rem;
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow-sm);
 }
 
 .prompt-question {
@@ -112,9 +133,9 @@
 }
 
 .counter-button {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
   border: 1px solid var(--border-soft);
   background-color: var(--surface);
   color: var(--text-primary);
@@ -124,10 +145,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 400;
 }
 
 .counter-button:hover:not(:disabled) {
   background-color: var(--action-neutral-hover);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.counter-button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
 }
 
 .counter-button:disabled {
@@ -162,6 +194,7 @@
   display: flex;
   gap: 0.75rem;
   margin-top: 2rem;
+  padding: 0 2rem 2rem 2rem;
 }
 
 .daily-log-actions button {

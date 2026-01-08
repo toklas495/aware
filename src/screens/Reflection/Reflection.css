@@ -1,5 +1,11 @@
 .reflection {
-  padding: 2rem;
+  padding: 0;
+}
+
+.reflection > h2 {
+  padding: 1.5rem 2rem 0.75rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
 }
 
 .reflection-intro {
@@ -7,6 +13,7 @@
   font-style: italic;
   margin-bottom: 2rem;
   font-size: 0.95rem;
+  padding: 0 2rem;
 }
 
 .reflection-questions {
@@ -14,6 +21,7 @@
   flex-direction: column;
   gap: 1.5rem;
   margin-bottom: 2rem;
+  padding: 0 2rem;
 }
 
 .reflection-question {
@@ -30,20 +38,22 @@
 
 .reflection-question textarea {
   width: 100%;
-  min-height: 5rem;
-  padding: 0.875rem;
+  min-height: 6rem;
+  padding: 1rem;
   border: 1px solid var(--border-soft);
-  border-radius: 6px;
+  border-radius: 12px;
   background-color: var(--surface);
   color: var(--text-primary);
   font-family: inherit;
   line-height: 1.6;
   resize: vertical;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .reflection-closure {
   margin: 2rem 0;
-  padding: 1rem;
+  padding: 1rem 2rem;
   text-align: center;
 }
 
@@ -144,6 +154,7 @@
   display: flex;
   gap: 0.75rem;
   margin-top: 1rem;
+  padding: 0 2rem 2rem 2rem;
 }
 
 .reflection-actions button {

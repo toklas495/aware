@@ -22,5 +22,10 @@ export default defineConfig({
     outDir: 'dist',
     assetsDir: 'assets',
     emptyOutDir: true,
+    // Ensure images in public folder are not compressed
+    assetsInlineLimit: 0, // Don't inline small assets, keep as files
   },
+  
+  // Optimize image handling - no compression for logo files
+  assetsInclude: ['**/*.svg', '**/*.png', '**/*.ico'],
 });

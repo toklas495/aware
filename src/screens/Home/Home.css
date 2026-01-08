@@ -1,103 +1,128 @@
 .home {
-  padding: 2rem;
+  padding: 2rem 1.5rem;
+  min-height: calc(100vh - 80px);
+}
+
+.home-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.75rem;
+  margin-bottom: 2.5rem;
+  padding: 2rem 0 1rem;
 }
 
 .home h1 {
-  font-weight: 400;
-  margin-bottom: 0.5rem;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: -0.03em;
 }
 
 .home-subtitle {
   color: var(--text-secondary);
   font-style: italic;
-  margin-bottom: 1.5rem;
-  font-size: 0.95rem;
+  margin-bottom: 2rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  text-align: center;
+  max-width: 500px;
 }
 
 .home-footer {
-  margin-top: 2rem;
+  margin-top: 3rem;
+  padding-top: 2rem;
   color: var(--text-tertiary);
-  font-size: 0.85rem;
+  font-size: 0.8125rem;
   font-style: italic;
   text-align: center;
+  border-top: 1px solid var(--border-subtle);
 }
 
 .today-points {
-  display: flex;
+  display: inline-flex;
   align-items: baseline;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
+  gap: 0.625rem;
+  margin: 0 auto 2rem;
+  padding: 1rem 1.5rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
 }
 
 .points-value {
-  font-size: 1.5rem;
-  font-weight: 300;
+  font-size: 1.75rem;
+  font-weight: 600;
   color: var(--text-primary);
+  letter-spacing: -0.02em;
 }
 
 .points-label {
   color: var(--text-secondary);
-  font-size: 0.9rem;
+  font-size: 0.875rem;
+  font-weight: 400;
 }
 
 .home-actions {
-  margin-top: 2rem;
+  margin-top: 2.5rem;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-}
-
-.primary-button {
-  width: 100%;
-  padding: 0.75rem;
-  background-color: var(--text-primary);
-  color: var(--surface);
-  border: none;
-  margin-bottom: 0.5rem;
-}
-
-.primary-button:hover {
-  background-color: var(--text-secondary);
-}
-
-.secondary-button {
-  width: 100%;
-  padding: 0.75rem;
-  background-color: transparent;
-  color: var(--text-secondary);
-  border: 1px solid var(--border-soft);
-}
-
-.secondary-button:hover {
-  background-color: var(--action-neutral-hover);
-  color: var(--text-primary);
+  gap: 0.875rem;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .done-message {
-  margin: 1.5rem 0;
-  padding: 1rem;
+  margin: 2rem auto;
+  padding: 1.5rem;
   background-color: var(--surface);
   border: 1px solid var(--border-soft);
-  border-radius: 6px;
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+  max-width: 400px;
 }
 
 /* Mobile responsive */
+@media (max-width: 768px) {
+  .home {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .home-header {
+    gap: 1.5rem;
+    padding: 1.5rem 0 0.75rem;
+    margin-bottom: 2rem;
+  }
+}
+
 @media (max-width: 480px) {
   .home {
-    padding: 1rem 0.75rem;
+    padding: 1.25rem 1rem;
+  }
+
+  .home-header {
+    gap: 1.25rem;
+    padding: 1rem 0 0.5rem;
+    margin-bottom: 1.75rem;
   }
 
   .points-value {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
+  }
+
+  .today-points {
+    padding: 0.875rem 1.25rem;
   }
 
   .home-actions {
-    gap: 0.5rem;
+    gap: 0.75rem;
+    margin-top: 2rem;
   }
 
-  .primary-button,
-  .secondary-button {
-    padding: 0.875rem;
-    font-size: 0.95rem;
+  .home-subtitle {
+    margin-bottom: 1.75rem;
+    font-size: 0.875rem;
   }
 }

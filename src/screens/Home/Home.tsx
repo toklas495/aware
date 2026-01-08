@@ -4,6 +4,7 @@ import { useDayState } from '../../domain/state/useDayState';
 import { calculateDayPoints } from '../../domain/day/day.points';
 import { getUserActivities } from '../../domain/activity/activity.config';
 import { isMorningSetupComplete } from '../../domain/day/day.points';
+import { Logo } from '../../components/Logo';
 import './Home.css';
 
 export function Home() {
@@ -55,7 +56,10 @@ export function Home() {
 
   return (
     <div className="home">
-      <h1>Today</h1>
+      <div className="home-header">
+        <Logo size="xlarge" />
+        <h1>Today</h1>
+      </div>
       <p className="home-subtitle">Nobody sees you. You are your own witness.</p>
 
       {todayPoints !== 0 && (

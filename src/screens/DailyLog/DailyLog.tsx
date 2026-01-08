@@ -5,6 +5,7 @@ import type { ActivityDefinition, ActivityIntentionality } from '../../domain/ac
 import { useAppState } from '../../domain/state/useAppState';
 import { useDayState } from '../../domain/state/useDayState';
 import { getActivityPointValue, getActivityCount } from '../../domain/day/day.points';
+import { AppHeader } from '../../components/AppHeader';
 import './DailyLog.css';
 
 export function DailyLog() {
@@ -183,6 +184,7 @@ export function DailyLog() {
 
   return (
     <div className="daily-log">
+      <AppHeader />
       <h2>Track Your Day</h2>
       <p className="log-description">Each time you do an activity, log it consciously.</p>
 
@@ -191,7 +193,6 @@ export function DailyLog() {
       </div>
 
       <div className="daily-log-actions">
-        <button onClick={() => navigate('/')}>Back</button>
         {(Object.keys(day.activityCounts ?? {}).length > 0) && (
           <button onClick={() => navigate('/reflection')} className="primary-button">
             Reflect

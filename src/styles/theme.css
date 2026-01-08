@@ -1,8 +1,9 @@
-/* Light theme */
+/* Light theme - Professional, clean */
 :root,
 [data-theme="light"] {
   --background: #fafafa;
   --surface: #ffffff;
+  --surface-elevated: #ffffff;
 
   --text-primary: #1a1a1a;
   --text-secondary: #666666;
@@ -10,19 +11,28 @@
 
   --border-soft: #e5e5e5;
   --border-subtle: #f0f0f0;
+  --border-strong: #d0d0d0;
 
-  --action-neutral: #e8e8e8;
-  --action-neutral-hover: #d0d0d0;
+  --action-neutral: #f5f5f5;
+  --action-neutral-hover: #eeeeee;
+  --action-pressed: #e8e8e8;
   
   --primary-button-bg: #1a1a1a;
-  --primary-button-text: #fafafa;
-  --primary-button-hover: #333333;
+  --primary-button-text: #ffffff;
+  --primary-button-hover: #2a2a2a;
+  --primary-button-active: #0a0a0a;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.12);
 }
 
-/* Dark theme - eye-friendly, deep, soft */
+/* Dark theme - Professional, eye-friendly */
 [data-theme="dark"] {
   --background: #0a0a0a;
   --surface: #151515;
+  --surface-elevated: #1a1a1a;
 
   --text-primary: #e5e5e5;
   --text-secondary: #999999;
@@ -30,16 +40,28 @@
 
   --border-soft: #2a2a2a;
   --border-subtle: #1f1f1f;
+  --border-strong: #3a3a3a;
 
-  --action-neutral: #252525;
-  --action-neutral-hover: #333333;
+  --action-neutral: #1f1f1f;
+  --action-neutral-hover: #252525;
+  --action-pressed: #2a2a2a;
   
   --primary-button-bg: #e5e5e5;
   --primary-button-text: #0a0a0a;
-  --primary-button-hover: #cccccc;
+  --primary-button-hover: #f5f5f5;
+  --primary-button-active: #d5d5d5;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.6);
 }
 
-/* Smooth transitions */
+/* Smooth transitions - selective for performance */
 * {
-  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }

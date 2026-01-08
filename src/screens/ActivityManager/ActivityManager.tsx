@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import type { ActivityDefinition } from '../../domain/activity/activity.types';
 import {
   loadUserActivities,
@@ -7,10 +6,10 @@ import {
   removeActivity,
   updateActivity,
 } from '../../domain/activity/activity.storage';
+import { AppHeader } from '../../components/AppHeader';
 import './ActivityManager.css';
 
 export function ActivityManager() {
-  const navigate = useNavigate();
   const [activities, setActivities] = useState<ActivityDefinition[]>([]);
   const [newActivityLabel, setNewActivityLabel] = useState('');
   const [newActivityType, setNewActivityType] = useState<'good' | 'bad'>('good');
@@ -63,6 +62,7 @@ export function ActivityManager() {
 
   return (
     <div className="activity-manager">
+      <AppHeader />
       <h2>Your Activities</h2>
       <p className="manager-description">
         Define what matters to you. You decide what nourishes you and what drains you.
@@ -143,9 +143,6 @@ export function ActivityManager() {
         </div>
       </div>
 
-      <div className="manager-actions">
-        <button onClick={() => navigate('/')}>Back</button>
-      </div>
     </div>
   );
 }

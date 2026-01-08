@@ -1,0 +1,63 @@
+===============================================
+AWARE APP - LOGO IMAGE REQUIREMENTS (QUICK REF)
+===============================================
+
+📁 ALL FILES GO IN: /public folder
+
+1. favicon.svg
+   Size: Vector (any size)
+   Format: SVG
+   Background: Transparent
+   ⭐ MOST IMPORTANT - Use this as your main logo
+
+2. favicon.ico  
+   Size: 16x16, 32x32, 48x48 (combined in one file)
+   Format: ICO
+   Background: Transparent or solid
+
+3. favicon-96x96.png
+   Size: 96x96 pixels (exactly)
+   Format: PNG
+   Background: Transparent (recommended)
+
+4. apple-touch-icon.png
+   Size: 180x180 pixels (exactly)
+   Format: PNG
+   Background: Transparent (iOS adds rounded corners)
+
+5. web-app-manifest-192x192.png
+   Size: 192x192 pixels (exactly)
+   Format: PNG
+   Background: Transparent or solid
+   ⚠️ Safe zone: Keep logo in center 80% (10% margin all sides)
+
+6. web-app-manifest-512x512.png
+   Size: 512x512 pixels (exactly)
+   Format: PNG
+   Background: Transparent or solid
+   ⚠️ Safe zone: Keep logo in center 80% (10% margin all sides)
+
+===============================================
+BACKGROUND RECOMMENDATION: TRANSPARENT
+===============================================
+✅ Best: Transparent background (works everywhere)
+✅ Alternative: Solid color (#fafafa for light, #0a0a0a for dark)
+
+===============================================
+IMPORTANT NOTES:
+===============================================
+- Logo must work at 16x16 pixels (very small!)
+- Should look good on both light and dark backgrounds
+- For 192x192 and 512x512: Keep important content in center 80%
+- Start with SVG, then generate PNGs from it
+
+===============================================
+TESTING:
+===============================================
+1. Replace files in /public
+2. Run: npm run dev
+3. Check browser tab icon
+4. Test on mobile (add to home screen)
+
+===============================================
+

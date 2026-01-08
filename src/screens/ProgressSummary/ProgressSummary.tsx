@@ -1,13 +1,12 @@
-import { useNavigate } from 'react-router-dom';
 import { getWeeklyPoints, getMonthlyPoints, getAllDays } from '../../domain/storage/storage.aggregation';
 import { useAppState } from '../../domain/state/useAppState';
 import { useDayState } from '../../domain/state/useDayState';
 import { calculateDayPoints } from '../../domain/day/day.points';
 import { getUserActivities } from '../../domain/activity/activity.config';
+import { AppHeader } from '../../components/AppHeader';
 import './ProgressSummary.css';
 
 export function ProgressSummary() {
-  const navigate = useNavigate();
   const { today } = useAppState();
   const { day } = useDayState(today);
   const activities = getUserActivities();
@@ -93,6 +92,7 @@ export function ProgressSummary() {
 
   return (
     <div className="progress-summary">
+      <AppHeader />
       <h2>Review</h2>
 
       <div className="summary-section">
@@ -154,9 +154,6 @@ export function ProgressSummary() {
         </div>
       )}
 
-      <div className="summary-actions">
-        <button onClick={() => navigate('/')}>Back</button>
-      </div>
     </div>
   );
 }
