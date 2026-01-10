@@ -42,12 +42,62 @@ export function DailyLog() {
     );
   }
 
-  const handleIncrement = (activityId: string) => {
-    // Show intentionality prompt first
-    setPendingIntentionality({
-      activityId,
-      intentionality: null,
-    });
+  const handleIncrement = (activityId: string, skipIntentionality = false) => {
+    if (!day) return;
+
+    const currentCount = day.activityCounts?.[activityId] ?? 0;
+    
+    // If skipIntentionality is true (from quick action), increment immediately with default 'automatic'
+    if (skipIntentionality) {
+      setDay(prev => {
+        if (!prev) return prev;
+        const count = prev.activityCounts?.[activityId] ?? 0;
+        const intentionality = prev.activityIntentionality?.[activityId] ?? [];
+        return {
+          ...prev,
+          activityCounts: {
+            ...(prev.activityCounts ?? {}),
+            [activityId]: count + 1,
+          },
+          activityIntentionality: {
+            ...(prev.activityIntentionality ?? {}),
+            [activityId]: [...intentionality, 'automatic'],
+          },
+        };
+      });
+      return;
+    }
+
+    // Check if this is first time logging this activity
+    if (currentCount === 0) {
+      // First time - show intentionality prompt
+      setPendingIntentionality({
+        activityId,
+        intentionality: null,
+      });
+    } else {
+      // Already logged - increment immediately with same intentionality as last
+      const currentIntentionality = day.activityIntentionality?.[activityId] ?? [];
+      const lastIntentionality = currentIntentionality[currentIntentionality.length - 1] || 'automatic';
+      
+      setDay(prev => {
+        if (!prev) return prev;
+        const count = prev.activityCounts?.[activityId] ?? 0;
+        const intentionality = prev.activityIntentionality?.[activityId] ?? [];
+        
+        return {
+          ...prev,
+          activityCounts: {
+            ...(prev.activityCounts ?? {}),
+            [activityId]: count + 1,
+          },
+          activityIntentionality: {
+            ...(prev.activityIntentionality ?? {}),
+            [activityId]: [...intentionality, lastIntentionality],
+          },
+        };
+      });
+    }
   };
 
   const handleConfirmIncrement = (intentionality: ActivityIntentionality) => {
@@ -168,7 +218,11 @@ export function DailyLog() {
             {unit && count > 0 && ` ${unit}`}
           </span>
           <button
-            onClick={() => handleIncrement(activity.id)}
+            onClick={() => handleIncrement(activity.id, false)}
+            onDoubleClick={(e) => {
+              e.preventDefault();
+              handleIncrement(activity.id, true);
+            }}
             className="counter-button"
             disabled={isPending}
             aria-label="Increase"
@@ -179,7 +233,7 @@ export function DailyLog() {
         
         {count > 0 && totalEnergy !== 0 && (
           <div className={`activity-energy ${activity.type === 'bad' ? 'energy-drained' : 'energy-gained'}`}>
-            {totalEnergy > 0 ? '+' : ''}{Math.round(totalEnergy)}
+            {totalEnergy > 0 ? '+' : ''}{totalEnergy % 1 === 0 ? totalEnergy : Math.round(totalEnergy * 100) / 100}
           </div>
         )}
       </div>

@@ -3,45 +3,15 @@ import type { ActivityId, ActivityDefinition } from '../activity/activity.types'
 
 /**
  * Energy calculation that considers:
- * - Repetition: Multiple instances have different effects (first vs subsequent)
- * - Intentionality: Intentional actions have slightly more positive impact
- * - Time: Energy effects vary based on when activities occur (future enhancement)
+ * - Simple multiplication: count * baseEnergy per instance
+ * - Intentionality: Intentional actions have slightly more positive impact (optional)
  * 
- * Aim for high correctness, not fake precision.
+ * Aim for high correctness and simplicity.
  */
-
-/**
- * Calculate energy per activity instance with diminishing returns for repetition
- * First instance has full effect, subsequent ones have slightly less (but still meaningful)
- */
-function calculateInstanceEnergy(
-  instanceIndex: number, // 0-based index
-  baseEnergy: number
-): number {
-  if (instanceIndex === 0) {
-    return baseEnergy;
-  }
-  
-  // Diminishing returns: each subsequent instance has 85% of previous effect
-  // This models real human energy patterns where repetition has less impact
-  const multiplier = Math.pow(0.85, instanceIndex);
-  return baseEnergy * multiplier;
-}
-
-/**
- * Intentionality modifier
- * Intentional actions tend to have slightly more positive impact (or less negative)
- */
-function getIntentionalityModifier(
-  intentionality: 'intentional' | 'automatic' | undefined
-): number {
-  if (intentionality === 'intentional') return 1.05; // 5% more positive effect
-  return 1.0;
-}
 
 /**
  * Calculate total energy for an activity on a given day
- * Takes into account repetition, timing, and intentionality
+ * Simple calculation: count * baseEnergy, with optional intentionality modifier
  */
 export function calculateActivityEnergy(
   day: DayData,
@@ -55,20 +25,30 @@ export function calculateActivityEnergy(
   const baseEnergyPerInstance = getActivityEnergyValue(day, activityId, activity);
   if (baseEnergyPerInstance === 0) return 0;
 
-  const intentionalityArray = day.activityIntentionality?.[activityId] ?? [];
+  // Simple calculation: count * baseEnergy
+  let totalEnergy = count * baseEnergyPerInstance;
 
-  let totalEnergy = 0;
-  
-  // Calculate energy for each instance
-  for (let i = 0; i < count; i++) {
-    const instanceEnergy = calculateInstanceEnergy(i, baseEnergyPerInstance);
-    const intentionality = intentionalityArray[i];
-    const intentionalityMod = getIntentionalityModifier(intentionality);
+  // Apply intentionality modifier if tracking intentionality
+  // Intentional actions get 5% boost (if we have intentionality data)
+  const intentionalityArray = day.activityIntentionality?.[activityId];
+  if (intentionalityArray && intentionalityArray.length === count && intentionalityArray.length > 0) {
+    // Count how many were intentional
+    const intentionalCount = intentionalityArray.filter(i => i === 'intentional').length;
+    const automaticCount = count - intentionalCount;
     
-    // Time modifier would require storing timestamps - future enhancement
-    // When implemented, could use activity type to adjust energy based on time of day
-    
-    totalEnergy += instanceEnergy * intentionalityMod;
+    if (intentionalCount > 0) {
+      if (baseEnergyPerInstance > 0) {
+        // For positive energy, intentional gets 5% boost
+        const intentionalEnergy = intentionalCount * baseEnergyPerInstance * 1.05;
+        const automaticEnergy = automaticCount * baseEnergyPerInstance;
+        totalEnergy = intentionalEnergy + automaticEnergy;
+      } else if (baseEnergyPerInstance < 0) {
+        // For negative energy (draining), intentional reduces the drain by 5%
+        const intentionalEnergy = intentionalCount * baseEnergyPerInstance * 0.95;
+        const automaticEnergy = automaticCount * baseEnergyPerInstance;
+        totalEnergy = intentionalEnergy + automaticEnergy;
+      }
+    }
   }
 
   return totalEnergy;

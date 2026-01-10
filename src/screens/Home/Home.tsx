@@ -70,19 +70,19 @@ export function Home() {
           {energyGained > 0 && (
             <div className="energy-item energy-gained">
               <span className="energy-label">Gained</span>
-              <span className="energy-value">+{Math.round(energyGained)}</span>
+              <span className="energy-value">+{energyGained % 1 === 0 ? energyGained : Math.round(energyGained * 100) / 100}</span>
             </div>
           )}
           {energyDrained > 0 && (
             <div className="energy-item energy-drained">
               <span className="energy-label">Drained</span>
-              <span className="energy-value">-{Math.round(energyDrained)}</span>
+              <span className="energy-value">-{energyDrained % 1 === 0 ? energyDrained : Math.round(energyDrained * 100) / 100}</span>
             </div>
           )}
           {totalEnergy !== 0 && (
             <div className="energy-item energy-total">
               <span className="energy-label">Net</span>
-              <span className="energy-value">{totalEnergy > 0 ? '+' : ''}{Math.round(totalEnergy)}</span>
+              <span className="energy-value">{totalEnergy > 0 ? '+' : ''}{totalEnergy % 1 === 0 ? totalEnergy : Math.round(totalEnergy * 100) / 100}</span>
             </div>
           )}
         </div>
