@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import { useAppState } from '../../domain/state/useAppState';
 import { useDayState } from '../../domain/state/useDayState';
-import { calculateDayPoints } from '../../domain/day/day.points';
+import { calculateDayEnergy, getEnergyGained, getEnergyDrained } from '../../domain/day/day.energy';
 import { getUserActivities } from '../../domain/activity/activity.config';
-import { isMorningSetupComplete } from '../../domain/day/day.points';
+import { isMorningSetupComplete } from '../../domain/day/day.energy';
 import { Logo } from '../../components/Logo';
 import './Home.css';
 
@@ -19,10 +19,14 @@ export function Home() {
     day,
     activities.map(a => a.id)
   );
-  const todayPoints = calculateDayPoints(day, activities);
+  
+  const totalEnergy = calculateDayEnergy(day, activities);
+  const energyGained = getEnergyGained(day, activities);
+  const energyDrained = getEnergyDrained(day, activities);
+  const hasActivity = Object.keys(day.activityCounts ?? {}).length > 0;
 
   const handleResetDay = () => {
-    if (confirm('Reset today\'s data? This cannot be undone.')) {
+    if (confirm('Reset today\'s log? This cannot be undone.')) {
       setDay(prev => ({
         ...prev!,
         activityCounts: {},
@@ -33,7 +37,7 @@ export function Home() {
   };
 
   const handleDeleteDay = () => {
-    if (confirm('Delete all data for today? This cannot be undone.')) {
+    if (confirm('Clear all data for today? This cannot be undone.')) {
       setDay(prev => ({
         ...prev!,
         activityCounts: {},
@@ -60,64 +64,86 @@ export function Home() {
         <Logo size="xlarge" />
         <h1>Today</h1>
       </div>
-      <p className="home-subtitle">Nobody sees you. You are your own witness.</p>
 
-      {todayPoints !== 0 && (
-        <div className="today-points">
-          <span className="points-value">{todayPoints}</span>
-          <span className="points-label">points today</span>
+      {hasActivity && (
+        <div className="energy-summary">
+          {energyGained > 0 && (
+            <div className="energy-item energy-gained">
+              <span className="energy-label">Gained</span>
+              <span className="energy-value">+{Math.round(energyGained)}</span>
+            </div>
+          )}
+          {energyDrained > 0 && (
+            <div className="energy-item energy-drained">
+              <span className="energy-label">Drained</span>
+              <span className="energy-value">-{Math.round(energyDrained)}</span>
+            </div>
+          )}
+          {totalEnergy !== 0 && (
+            <div className="energy-item energy-total">
+              <span className="energy-label">Net</span>
+              <span className="energy-value">{totalEnergy > 0 ? '+' : ''}{Math.round(totalEnergy)}</span>
+            </div>
+          )}
         </div>
       )}
 
       {!hasMorningSetup && (
-        <button onClick={() => navigate('/morning')} className="primary-button">
-          Morning Setup
-        </button>
+        <div className="home-main-action">
+          <button onClick={() => navigate('/morning')} className="primary-button">
+            Begin
+          </button>
+        </div>
       )}
 
       {hasMorningSetup && !day.completed && (
-        <>
+        <div className="home-main-action">
           <button onClick={() => navigate('/day')} className="primary-button">
-            Track Your Day
+            Log
           </button>
-          {(Object.keys(day.activityCounts ?? {}).length > 0) && (
-            <button onClick={() => navigate('/reflection')}>
-              Reflect
-            </button>
-          )}
-        </>
+        </div>
+      )}
+
+      {hasActivity && !day.completed && (
+        <div className="home-secondary-actions">
+          <button onClick={() => navigate('/reflection')} className="secondary-button">
+            Reflect
+          </button>
+        </div>
       )}
 
       {day.completed && (
         <div className="done-message">
-          <p>You are done for today.</p>
+          <p>Day complete.</p>
         </div>
       )}
 
       <div className="home-actions">
-        <button onClick={() => navigate('/progress')}>
+        <button onClick={() => navigate('/progress')} className="secondary-button">
           Review
         </button>
-        <button onClick={() => navigate('/activities')}>
+        <button onClick={() => navigate('/activities')} className="secondary-button">
           Activities
         </button>
-        {(Object.keys(day.activityCounts ?? {}).length > 0) && (
-          <button onClick={handleResetDay} className="secondary-button">
-            Reset Today
-          </button>
-        )}
-        {hasMorningSetup && (
-          <>
-            <button onClick={handleDeleteDay} className="secondary-button">
+      </div>
+
+      {(hasActivity || hasMorningSetup) && (
+        <div className="home-footer-actions">
+          {hasActivity && (
+            <button onClick={handleResetDay} className="secondary-button small">
+              Reset Today
+            </button>
+          )}
+          {hasMorningSetup && (
+            <button onClick={handleDeleteDay} className="secondary-button small">
               Clear Today
             </button>
-            <button onClick={handleResetAll} className="secondary-button">
-              Reset All
-            </button>
-          </>
-        )}
-      </div>
-      <p className="home-footer">You can reset anytime. Nothing is permanent.</p>
+          )}
+          <button onClick={handleResetAll} className="secondary-button small">
+            Reset All
+          </button>
+        </div>
+      )}
     </div>
   );
 }

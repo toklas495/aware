@@ -4,7 +4,7 @@
 export type ActivityId = string;
 
 /**
- * Activity type: good habit (increases points) or bad habit (decreases points)
+ * Activity type: gains energy (good) or drains energy (bad)
  */
 export type ActivityType = 'good' | 'bad';
 
@@ -23,7 +23,7 @@ export interface ActivityPair {
 
 /**
  * Activity definition with type and optional pair
- * Extended to support points, intentionality awareness, and units
+ * Extended to support energy values, intentionality awareness, and units
  */
 export interface ActivityDefinition {
   id: ActivityId;
@@ -31,6 +31,6 @@ export interface ActivityDefinition {
   type: ActivityType;
   pairId?: ActivityId; // ID of the opposite activity (good <-> bad)
   // New fields (backward compatible - optional)
-  points?: number; // Default point value for this activity (can be overridden per day)
+  points?: number; // Default energy value per instance (can be overridden per day). Positive for good, negative for bad.
   unit?: string; // Optional unit (e.g., 'km', 'minutes', 'sessions')
 }

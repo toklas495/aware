@@ -8,8 +8,9 @@ export interface DayReflection {
 }
 
 /**
- * Points assigned to each activity for this day (set in morning)
- * Positive for good habits, negative for bad habits
+ * Energy values assigned to each activity for this day (set in morning)
+ * Positive for activities that gain energy, negative for activities that drain energy
+ * (Still called "activityPoints" in the data model for backward compatibility)
  */
 export interface ActivityPoints {
   [activityId: string]: number;
@@ -40,7 +41,7 @@ export interface ActivityIntentionality {
 export interface DayData {
   date: string; // YYYY-MM-DD (local, human time)
   intention?: string;
-  activityPoints?: ActivityPoints; // Points per activity (set in morning)
+  activityPoints?: ActivityPoints; // Energy values per activity (set in morning)
   activityUnits?: ActivityUnits; // Units per activity (optional, set in morning)
   activityCounts: ActivityCounts; // Count of times each activity was done
   activityIntentionality?: ActivityIntentionality; // Intentional/automatic tracking

@@ -1,76 +1,120 @@
 .home {
   padding: 2rem 1.5rem;
   min-height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .home-header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.75rem;
-  margin-bottom: 2.5rem;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
   padding: 2rem 0 1rem;
 }
 
 .home h1 {
-  font-weight: 600;
+  font-weight: 400;
   margin: 0;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
+  font-size: 2rem;
 }
 
-.home-subtitle {
-  color: var(--text-secondary);
-  font-style: italic;
-  margin-bottom: 2rem;
-  font-size: 0.9375rem;
-  line-height: 1.6;
-  text-align: center;
-  max-width: 500px;
+.energy-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 2.5rem;
 }
 
-.home-footer {
-  margin-top: 3rem;
-  padding-top: 2rem;
-  color: var(--text-tertiary);
-  font-size: 0.8125rem;
-  font-style: italic;
-  text-align: center;
-  border-top: 1px solid var(--border-subtle);
-}
-
-.today-points {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.625rem;
-  margin: 0 auto 2rem;
-  padding: 1rem 1.5rem;
+.energy-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
   background-color: var(--surface);
   border: 1px solid var(--border-soft);
-  border-radius: 12px;
+  border-radius: 10px;
   box-shadow: var(--shadow-sm);
 }
 
-.points-value {
-  font-size: 1.75rem;
-  font-weight: 600;
-  color: var(--text-primary);
+.energy-label {
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+.energy-value {
+  font-size: 1.5rem;
+  font-weight: 500;
   letter-spacing: -0.02em;
 }
 
-.points-label {
-  color: var(--text-secondary);
-  font-size: 0.875rem;
-  font-weight: 400;
+.energy-gained .energy-value {
+  color: var(--energy-gained);
+}
+
+.energy-drained .energy-value {
+  color: var(--energy-drained);
+}
+
+.energy-total .energy-value {
+  color: var(--text-primary);
+}
+
+.home-main-action {
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 1.5rem;
+}
+
+.home-main-action button {
+  width: 100%;
+}
+
+.home-secondary-actions {
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 2rem;
 }
 
 .home-actions {
-  margin-top: 2.5rem;
+  width: 100%;
+  max-width: 400px;
   display: flex;
   flex-direction: column;
-  gap: 0.875rem;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.home-footer-actions {
+  width: 100%;
   max-width: 400px;
-  margin-left: auto;
-  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.home-footer-actions button.small {
+  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
+  background-color: transparent;
+  border: none;
+  color: var(--text-tertiary);
+  box-shadow: none;
+}
+
+.home-footer-actions button.small:hover {
+  background-color: var(--action-neutral);
+  color: var(--text-secondary);
 }
 
 .done-message {
@@ -78,10 +122,16 @@
   padding: 1.5rem;
   background-color: var(--surface);
   border: 1px solid var(--border-soft);
-  border-radius: 12px;
+  border-radius: 10px;
   box-shadow: var(--shadow-sm);
   text-align: center;
   max-width: 400px;
+}
+
+.done-message p {
+  color: var(--text-secondary);
+  margin: 0;
+  font-size: 0.9375rem;
 }
 
 /* Mobile responsive */
@@ -91,9 +141,9 @@
   }
 
   .home-header {
-    gap: 1.5rem;
+    gap: 1.25rem;
     padding: 1.5rem 0 0.75rem;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
   }
 }
 
@@ -103,26 +153,26 @@
   }
 
   .home-header {
-    gap: 1.25rem;
+    gap: 1rem;
     padding: 1rem 0 0.5rem;
-    margin-bottom: 1.75rem;
+    margin-bottom: 2rem;
   }
 
-  .points-value {
-    font-size: 1.5rem;
+  .home h1 {
+    font-size: 1.75rem;
   }
 
-  .today-points {
-    padding: 0.875rem 1.25rem;
+  .energy-value {
+    font-size: 1.25rem;
   }
 
-  .home-actions {
-    gap: 0.75rem;
-    margin-top: 2rem;
+  .energy-item {
+    padding: 0.875rem 1rem;
   }
 
-  .home-subtitle {
-    margin-bottom: 1.75rem;
-    font-size: 0.875rem;
+  .home-actions,
+  .home-secondary-actions,
+  .home-main-action {
+    max-width: 100%;
   }
 }

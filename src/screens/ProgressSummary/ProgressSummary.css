@@ -3,52 +3,63 @@
 }
 
 .progress-summary > h2 {
-  padding: 1.5rem 2rem 0.75rem;
-  font-weight: 500;
+  padding: 1.5rem 2rem 1rem;
+  font-weight: 400;
   letter-spacing: -0.02em;
+  font-size: 2rem;
 }
 
 .summary-section {
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
   padding: 0 2rem;
 }
 
 .summary-section h3 {
   font-weight: 400;
   margin-bottom: 1rem;
+  font-size: 1rem;
+  letter-spacing: -0.01em;
 }
 
-.points-breakdown {
+.energy-breakdown {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  padding: 1.5rem;
-  background-color: var(--surface);
-  border: 1px solid var(--border-soft);
-  border-radius: 8px;
+  gap: 0.75rem;
 }
 
-.points-item {
+.energy-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 1rem 1.25rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: 10px;
+  box-shadow: var(--shadow-sm);
 }
 
-.points-label {
+.energy-label {
   color: var(--text-secondary);
+  font-size: 0.9375rem;
+  font-weight: 400;
 }
 
-.points-value {
+.energy-value {
   font-size: 1.25rem;
-  font-weight: 500;
+  font-weight: 400;
+  letter-spacing: -0.01em;
 }
 
-.points-value.positive {
+.energy-gained .energy-value {
+  color: var(--energy-gained);
+}
+
+.energy-drained .energy-value {
+  color: var(--energy-drained);
+}
+
+.energy-total .energy-value {
   color: var(--text-primary);
-}
-
-.points-value.negative {
-  color: var(--text-secondary);
 }
 
 .totals-list {
@@ -64,7 +75,7 @@
   padding: 1rem 1.25rem;
   background-color: var(--surface);
   border: 1px solid var(--border-soft);
-  border-radius: 12px;
+  border-radius: 10px;
   box-shadow: var(--shadow-sm);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -78,78 +89,78 @@
 .total-period {
   color: var(--text-primary);
   font-weight: 400;
+  font-size: 0.9375rem;
 }
 
 .total-value {
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 400;
+  letter-spacing: -0.01em;
 }
 
-.total-value.positive {
-  color: var(--text-primary);
+.total-value.energy-gained {
+  color: var(--energy-gained);
 }
 
-.total-value.negative {
-  color: var(--text-secondary);
-}
-
-.patterns-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.pattern-statement {
-  padding: 0.875rem 1rem;
-  background-color: var(--surface);
-  border: 1px solid var(--border-soft);
-  border-radius: 6px;
-  color: var(--text-primary);
-  font-style: italic;
-  margin: 0;
-  font-weight: 300;
+.total-value.energy-drained {
+  color: var(--energy-drained);
 }
 
 .empty-state {
   color: var(--text-secondary);
-  font-style: italic;
+  font-size: 0.9375rem;
+  padding: 1rem 0;
 }
 
 .summary-actions {
   margin-top: 2rem;
-}
-
-.summary-actions button {
-  padding: 0.75rem 1.5rem;
+  padding: 0 2rem 2rem;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Mobile responsive */
-@media (max-width: 480px) {
-  .progress-summary {
-    padding: 1rem 0.75rem;
+@media (max-width: 768px) {
+  .progress-summary > h2 {
+    padding: 1.25rem 1.5rem 0.75rem;
+    font-size: 1.75rem;
   }
 
-  .points-value {
+  .summary-section {
+    padding: 0 1.5rem;
+  }
+
+  .summary-actions {
+    padding: 0 1.5rem 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .progress-summary > h2 {
+    padding: 1rem 1.25rem 0.75rem;
     font-size: 1.5rem;
   }
 
-  .points-table {
-    font-size: 0.9rem;
+  .summary-section {
+    padding: 0 1.25rem;
+    margin-bottom: 2rem;
   }
 
-  .points-table th,
-  .points-table td {
-    padding: 0.5rem;
+  .energy-item {
+    padding: 0.875rem 1rem;
   }
 
-  .points-table th:first-child,
-  .points-table td:first-child {
-    padding-left: 0.75rem;
+  .energy-value {
+    font-size: 1.125rem;
   }
 
-  .points-table th:last-child,
-  .points-table td:last-child {
-    padding-right: 0.75rem;
+  .total-item {
+    padding: 0.875rem 1rem;
+  }
+
+  .summary-actions {
+    padding: 0 1.25rem 1.25rem;
   }
 }
 

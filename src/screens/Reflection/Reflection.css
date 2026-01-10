@@ -3,17 +3,10 @@
 }
 
 .reflection > h2 {
-  padding: 1.5rem 2rem 0.75rem;
-  font-weight: 500;
+  padding: 1.5rem 2rem 1rem;
+  font-weight: 400;
   letter-spacing: -0.02em;
-}
-
-.reflection-intro {
-  color: var(--text-secondary);
-  font-style: italic;
-  margin-bottom: 2rem;
-  font-size: 0.95rem;
-  padding: 0 2rem;
+  font-size: 2rem;
 }
 
 .reflection-questions {
@@ -38,156 +31,75 @@
 
 .reflection-question textarea {
   width: 100%;
-  min-height: 6rem;
+  min-height: 5rem;
   padding: 1rem;
   border: 1px solid var(--border-soft);
-  border-radius: 12px;
+  border-radius: 10px;
   background-color: var(--surface);
   color: var(--text-primary);
   font-family: inherit;
+  font-size: 0.9375rem;
   line-height: 1.6;
   resize: vertical;
   box-shadow: var(--shadow-sm);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.reflection-closure {
-  margin: 2rem 0;
-  padding: 1rem 2rem;
-  text-align: center;
-}
-
-.closure-text {
-  color: var(--text-tertiary);
-  font-size: 0.85rem;
-  font-style: italic;
-}
-
-.points-breakdown {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.points-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.points-label {
-  color: var(--text-secondary);
-}
-
-.points-value {
-  font-size: 1.25rem;
-  font-weight: 500;
-}
-
-.points-value.positive {
+.reflection-question label {
   color: var(--text-primary);
-}
-
-.points-value.negative {
-  color: var(--text-secondary);
-}
-
-.choices-section {
-  margin-bottom: 2rem;
-  padding: 1.5rem;
-  background-color: var(--surface);
-  border: 1px solid var(--border-soft);
-  border-radius: 8px;
-}
-
-.choices-section h3 {
   font-weight: 400;
-  margin-bottom: 1rem;
-  font-size: 1.1rem;
-}
-
-.choices-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.choice-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.75rem 0;
-  border-bottom: 1px solid var(--border-soft);
-}
-
-.choice-item:last-child {
-  border-bottom: none;
-}
-
-.choice-name {
-  color: var(--text-primary);
-}
-
-.choice-count {
-  color: var(--text-secondary);
-  font-weight: 500;
-}
-
-.empty-reflection {
-  color: var(--text-secondary);
-  text-align: center;
-  padding: 2rem;
-  font-style: italic;
-}
-
-.reflection-notes {
-  margin-bottom: 2rem;
-}
-
-.reflection-notes textarea {
-  width: 100%;
-  min-height: 4rem;
-  margin-bottom: 1rem;
+  font-size: 0.9375rem;
+  margin-bottom: 0.5rem;
 }
 
 .reflection-actions {
   display: flex;
   gap: 0.75rem;
-  margin-top: 1rem;
-  padding: 0 2rem 2rem 2rem;
+  margin-top: 2rem;
+  padding: 0 2rem 2rem;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .reflection-actions button {
   flex: 1;
-  padding: 0.75rem;
-}
-
-.reflection-actions .primary-button {
-  background-color: var(--text-primary);
-  color: var(--surface);
-  border: none;
-}
-
-.reflection-actions .primary-button:hover {
-  background-color: var(--text-secondary);
 }
 
 /* Mobile responsive */
-@media (max-width: 480px) {
-  .reflection {
-    padding: 1rem 0.75rem;
+@media (max-width: 768px) {
+  .reflection > h2 {
+    padding: 1.25rem 1.5rem 0.75rem;
+    font-size: 1.75rem;
   }
 
-  .reflection textarea {
-    min-height: 3.5rem;
-    font-size: 0.95rem;
+  .reflection-questions {
+    padding: 0 1.5rem;
+  }
+
+  .reflection-actions {
+    padding: 0 1.5rem 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .reflection > h2 {
+    padding: 1rem 1.25rem 0.75rem;
+    font-size: 1.5rem;
+  }
+
+  .reflection-questions {
+    padding: 0 1.25rem;
+    gap: 1.25rem;
+  }
+
+  .reflection-question textarea {
+    min-height: 4rem;
+    font-size: 16px; /* Prevents zoom on iOS */
   }
 
   .reflection-actions {
     flex-direction: column;
-  }
-
-  .reflection-actions button {
-    width: 100%;
+    padding: 0 1.25rem 1.25rem;
   }
 }

@@ -26,17 +26,14 @@ export function Reflection() {
   return (
     <div className="reflection">
       <AppHeader />
-      <h2>Night Reflection</h2>
-      <p className="reflection-intro">
-        Nobody sees you. You are your own witness.
-      </p>
+      <h2>Reflect</h2>
 
       <div className="reflection-questions">
         <div className="reflection-question">
-          <label htmlFor="energized">What energized me today?</label>
+          <label htmlFor="energized">What gained energy?</label>
           <textarea
             id="energized"
-            placeholder="What brought you energy or clarity?"
+            placeholder="What brought energy?"
             value={energized}
             onChange={e =>
               setDay(prev => ({
@@ -51,10 +48,10 @@ export function Reflection() {
         </div>
 
         <div className="reflection-question">
-          <label htmlFor="drained">What drained me today?</label>
+          <label htmlFor="drained">What drained energy?</label>
           <textarea
             id="drained"
-            placeholder="What took your energy or clarity?"
+            placeholder="What took energy?"
             value={drained}
             onChange={e =>
               setDay(prev => ({
@@ -69,10 +66,10 @@ export function Reflection() {
         </div>
 
         <div className="reflection-question">
-          <label htmlFor="observed">What did I observe about myself?</label>
+          <label htmlFor="observed">Observations</label>
           <textarea
             id="observed"
-            placeholder="Observation is enough."
+            placeholder="What did you observe?"
             value={observed}
             onChange={e =>
               setDay(prev => ({
@@ -87,15 +84,12 @@ export function Reflection() {
         </div>
       </div>
 
-      <div className="reflection-closure">
-        <p className="closure-text">
-          Nobody will check this. Be honest with yourself.
-        </p>
-      </div>
-
       <div className="reflection-actions">
+        <button onClick={() => navigate('/')} className="secondary-button">
+          Back
+        </button>
         <button onClick={handleComplete} className="primary-button">
-          Close the day
+          Close
         </button>
       </div>
     </div>

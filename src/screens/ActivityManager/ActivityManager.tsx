@@ -30,7 +30,7 @@ export function ActivityManager() {
   };
 
   const handleDelete = (id: string) => {
-    if (confirm('Remove this activity? It will be removed from all future days.')) {
+    if (confirm('Remove this activity?')) {
       removeActivity(id);
       setActivities(loadUserActivities());
     }
@@ -63,10 +63,7 @@ export function ActivityManager() {
   return (
     <div className="activity-manager">
       <AppHeader />
-      <h2>Your Activities</h2>
-      <p className="manager-description">
-        Define what matters to you. You decide what nourishes you and what drains you.
-      </p>
+      <h2>Activities</h2>
 
       <div className="add-activity-section">
         <div className="add-activity-input">
@@ -86,8 +83,8 @@ export function ActivityManager() {
             onChange={e => setNewActivityType(e.target.value as 'good' | 'bad')}
             className="type-select"
           >
-            <option value="good">Good Habit</option>
-            <option value="bad">Bad Habit</option>
+            <option value="good">Gains energy</option>
+            <option value="bad">Drains energy</option>
           </select>
           <button onClick={handleAdd} className="add-button">
             Add
@@ -97,9 +94,9 @@ export function ActivityManager() {
 
       <div className="activities-sections">
         <div className="activity-section">
-          <h3>Good Habits</h3>
+          <h3>Gains energy</h3>
           {goodActivities.length === 0 ? (
-            <p className="empty-state">No good habits yet</p>
+            <p className="empty-state">None yet</p>
           ) : (
             goodActivities.map(activity => (
               <ActivityItem
@@ -120,9 +117,9 @@ export function ActivityManager() {
         </div>
 
         <div className="activity-section">
-          <h3>Bad Habits</h3>
+          <h3>Drains energy</h3>
           {badActivities.length === 0 ? (
-            <p className="empty-state">No bad habits yet</p>
+            <p className="empty-state">None yet</p>
           ) : (
             badActivities.map(activity => (
               <ActivityItem
@@ -194,8 +191,8 @@ function ActivityItem({
             onChange={e => setEditingType(e.target.value as 'good' | 'bad')}
             className="type-select-small"
           >
-            <option value="good">Good</option>
-            <option value="bad">Bad</option>
+            <option value="good">Gains</option>
+            <option value="bad">Drains</option>
           </select>
           <button onClick={() => onSaveEdit(activity.id)} className="save-button">
             Save

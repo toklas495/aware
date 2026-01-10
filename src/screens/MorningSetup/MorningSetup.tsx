@@ -26,15 +26,18 @@ export function MorningSetup() {
   if (activities.length === 0) {
     return (
       <div className="morning-setup">
-        <h2>Morning Setup</h2>
+        <AppHeader />
+        <h2>Setup</h2>
         <p className="setup-description">
-          You need to add activities first before setting up your day.
+          Add activities first.
         </p>
         <div className="setup-actions">
           <button onClick={() => navigate('/activities')} className="primary-button">
-            Manage Activities
+            Activities
           </button>
-          <button onClick={() => navigate('/')}>Back</button>
+          <button onClick={() => navigate('/')} className="secondary-button">
+            Back
+          </button>
         </div>
       </div>
     );
@@ -89,12 +92,9 @@ export function MorningSetup() {
   return (
     <div className="morning-setup">
       <AppHeader />
-      <h2>Morning Setup</h2>
+      <h2>Setup</h2>
       <p className="setup-description">
-        You decide what nourishes you and what drains you.
-      </p>
-      <p className="setup-hint">
-        Assign point values to each activity. Optional: add a unit (km, minutes, sessions).
+        Set energy values for each activity. What gains energy, what drains it.
       </p>
 
       <div className="intention-section">
@@ -110,7 +110,6 @@ export function MorningSetup() {
 
       <div className="activity-points-list">
         <div className="points-section">
-          <h3>Activities</h3>
           {activities.map(activity => (
             <div key={activity.id} className="activity-point-input">
               <label htmlFor={`points-${activity.id}`}>{activity.label}</label>
@@ -126,7 +125,7 @@ export function MorningSetup() {
                 <input
                   id={`unit-${activity.id}`}
                   type="text"
-                  placeholder="unit (optional)"
+                  placeholder="unit"
                   value={activityUnits[activity.id] ?? activity.unit ?? ''}
                   onChange={e => handleUnitChange(activity.id, e.target.value)}
                   className="unit-input"
@@ -139,7 +138,7 @@ export function MorningSetup() {
 
       <div className="setup-actions">
         <button onClick={handleComplete} className="primary-button">
-          Begin the day
+          Begin
         </button>
       </div>
     </div>

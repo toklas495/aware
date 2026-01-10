@@ -1,6 +1,7 @@
 import type { DayData } from '../day/day.types';
 import { loadDay } from './day.repository';
-import { calculateDayPoints } from '../day/day.points';
+import { calculateDayEnergy } from '../day/day.energy';
+import { calculateDayPoints } from '../day/day.points'; // For backward compatibility
 import { getTodayDateString } from '../../utils/date';
 import { loadUserActivities } from '../activity/activity.storage';
 
@@ -29,7 +30,54 @@ export function getAllDays(): DayData[] {
 }
 
 /**
- * Calculate weekly points summary
+ * Calculate weekly energy summary
+ */
+export function getWeeklyEnergy(): { week: string; energy: number }[] {
+  const days = getAllDays();
+  const activities = loadUserActivities();
+  const weeks: Map<string, { energy: number }> = new Map();
+
+  days.forEach(day => {
+    const date = new Date(day.date + 'T00:00:00');
+    const weekStart = new Date(date);
+    weekStart.setDate(date.getDate() - date.getDay()); // Sunday
+    const weekKey = getTodayDateString(weekStart);
+    
+    const existing = weeks.get(weekKey) ?? { energy: 0 };
+    existing.energy += calculateDayEnergy(day, activities);
+    weeks.set(weekKey, existing);
+  });
+
+  return Array.from(weeks.entries())
+    .map(([week, data]) => ({ week, ...data }))
+    .sort((a, b) => b.week.localeCompare(a.week))
+    .slice(0, 12); // Last 12 weeks
+}
+
+/**
+ * Calculate monthly energy summary
+ */
+export function getMonthlyEnergy(): { month: string; energy: number }[] {
+  const days = getAllDays();
+  const activities = loadUserActivities();
+  const months: Map<string, { energy: number }> = new Map();
+
+  days.forEach(day => {
+    const monthKey = day.date.substring(0, 7); // YYYY-MM
+    
+    const existing = months.get(monthKey) ?? { energy: 0 };
+    existing.energy += calculateDayEnergy(day, activities);
+    months.set(monthKey, existing);
+  });
+
+  return Array.from(months.entries())
+    .map(([month, data]) => ({ month, ...data }))
+    .sort((a, b) => b.month.localeCompare(a.month))
+    .slice(0, 12); // Last 12 months
+}
+
+/**
+ * @deprecated Use getWeeklyEnergy instead
  */
 export function getWeeklyPoints(): { week: string; points: number; days: number }[] {
   const days = getAllDays();
@@ -51,11 +99,11 @@ export function getWeeklyPoints(): { week: string; points: number; days: number 
   return Array.from(weeks.entries())
     .map(([week, data]) => ({ week, ...data }))
     .sort((a, b) => b.week.localeCompare(a.week))
-    .slice(0, 12); // Last 12 weeks
+    .slice(0, 12);
 }
 
 /**
- * Calculate monthly points summary
+ * @deprecated Use getMonthlyEnergy instead
  */
 export function getMonthlyPoints(): { month: string; points: number; days: number }[] {
   const days = getAllDays();
@@ -63,7 +111,7 @@ export function getMonthlyPoints(): { month: string; points: number; days: numbe
   const months: Map<string, { points: number; days: number }> = new Map();
 
   days.forEach(day => {
-    const monthKey = day.date.substring(0, 7); // YYYY-MM
+    const monthKey = day.date.substring(0, 7);
     
     const existing = months.get(monthKey) ?? { points: 0, days: 0 };
     existing.points += calculateDayPoints(day, activities);
@@ -74,6 +122,6 @@ export function getMonthlyPoints(): { month: string; points: number; days: numbe
   return Array.from(months.entries())
     .map(([month, data]) => ({ month, ...data }))
     .sort((a, b) => b.month.localeCompare(a.month))
-    .slice(0, 12); // Last 12 months
+    .slice(0, 12);
 }
 

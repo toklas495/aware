@@ -3,17 +3,17 @@
 }
 
 .morning-setup > h2 {
-  padding: 0 2rem;
+  padding: 1.5rem 2rem 1rem;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  font-size: 2rem;
 }
 
 .setup-description {
   color: var(--text-secondary);
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
   padding: 0 2rem;
-}
-
-.setup-hint {
-  padding: 0 2rem;
+  font-size: 0.9375rem;
 }
 
 .intention-section {
@@ -65,7 +65,7 @@
   padding: 1.25rem;
   background-color: var(--surface);
   border: 1px solid var(--border-soft);
-  border-radius: 12px;
+  border-radius: 10px;
   box-shadow: var(--shadow-sm);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -77,9 +77,10 @@
 
 .activity-point-input label {
   display: block;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
   color: var(--text-primary);
   font-weight: 400;
+  font-size: 0.9375rem;
 }
 
 .point-input-row {
@@ -89,11 +90,12 @@
 }
 
 .point-input-row input {
-  padding: 0.625rem;
+  padding: 0.75rem;
   border: 1px solid var(--border-soft);
-  border-radius: 6px;
-  background-color: var(--background);
+  border-radius: 8px;
+  background-color: var(--surface);
   color: var(--text-primary);
+  font-size: 0.9375rem;
 }
 
 .point-input-row .points-input {
@@ -108,53 +110,67 @@
 
 .setup-actions {
   margin-top: 2rem;
-  padding: 0 2rem 2rem 2rem;
-  display: flex;
-  gap: 0.75rem;
+  padding: 0 2rem 2rem;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .setup-actions button {
-  flex: 1;
-  padding: 0.75rem;
-}
-
-.primary-button {
-  background-color: var(--text-primary);
-  color: var(--surface);
-  border: none;
-}
-
-.primary-button:hover {
-  background-color: var(--text-secondary);
+  width: 100%;
 }
 
 /* Mobile responsive */
+@media (max-width: 768px) {
+  .morning-setup > h2 {
+    padding: 1.25rem 1.5rem 0.75rem;
+    font-size: 1.75rem;
+  }
+
+  .setup-description,
+  .intention-section,
+  .activity-points-list {
+    padding: 0 1.5rem;
+  }
+
+  .setup-actions {
+    padding: 0 1.5rem 1.5rem;
+  }
+}
+
 @media (max-width: 480px) {
-  .morning-setup {
-    padding: 1rem 0.75rem;
+  .morning-setup > h2 {
+    padding: 1rem 1.25rem 0.75rem;
+    font-size: 1.5rem;
+  }
+
+  .setup-description,
+  .intention-section,
+  .activity-points-list {
+    padding: 0 1.25rem;
   }
 
   .activity-point-input {
+    padding: 1rem;
+  }
+
+  .point-input-row {
     flex-direction: column;
     align-items: stretch;
     gap: 0.5rem;
   }
 
-  .activity-point-input label {
-    margin-bottom: 0.25rem;
-  }
-
-  .activity-point-input input {
+  .point-input-row input {
     width: 100%;
     text-align: left;
   }
 
-  .setup-actions {
-    flex-direction: column;
+  .point-input-row .points-input {
+    width: 100%;
   }
 
-  .setup-actions button {
-    width: 100%;
+  .setup-actions {
+    padding: 0 1.25rem 1.25rem;
   }
 }
 
