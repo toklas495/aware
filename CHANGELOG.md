@@ -5,122 +5,120 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+---
+
+## [2.1.0] - 2026-01-09
+
+### Added
+- **Energy-Based Awareness Model**
+  - Introduced explicit `energy` concept (replacing mental “points” abstraction)
+  - Energy can be positive (gained), negative (drained), or neutral (0)
+  - Energy values can be set per day or fall back to activity defaults
+  - Supports legacy `points` field for backward compatibility
+
+- **Realistic Daily Energy Calculation**
+  - New `calculateDayEnergy` domain logic
+  - Models human energy using:
+    - Diminishing returns for repeated activities
+    - Intentional vs automatic action weighting
+    - Time-based fatigue (activities close together reduce impact)
+  - Separates:
+    - Total energy
+    - Energy gained
+    - Energy drained
+  - Rounded output for calm, non-fake precision
+
+- **Activity Intentionality Weighting**
+  - Intentional actions have slightly higher energy impact
+  - Automatic actions still counted, without judgment
+  - No defaults — absence implies “automatic”
+
+- **Morning Setup Validation**
+  - New `isMorningSetupComplete` logic
+  - Morning setup is complete only when:
+    - Every activity has a defined energy value
+    - `0` is treated as a valid, intentional value
+  - Prevents logging without explicit energy awareness
+
+- **Day Lifecycle Handling**
+  - Clear separation of day state by date
+  - Completing a day does not affect future days
+  - New days automatically start incomplete with clean state
+
+---
+
+### Changed
+- **Terminology**
+  - Shifted from “points” to **energy** (conceptual clarity)
+  - UI reflects “Gained / Drained / Net” instead of scores
+  - Language further neutralized (observation-only tone)
+
+- **Home Screen Behavior**
+  - Displays daily energy summary only when data exists
+  - “Today is complete” shown only for the current day
+  - Automatically shows “Log activity” on the next day
+
+- **Data Model**
+  - Added `activityEnergy` to `DayData`
+  - Legacy fields (`activityPoints`) still supported
+  - Improved guards for corrupted or partial local data
+
+- **Calculation Architecture**
+  - Energy logic fully moved into domain layer
+  - UI now consumes derived values only
+  - Frontend remains simple; complexity hidden
+
+---
+
+### Technical
+- Added robust energy calculation utilities
+- Improved TypeScript strictness around numeric validation
+- Strengthened backward compatibility paths
+- Improved localStorage safety and silent recovery
+- Domain logic made deterministic and testable
+
+---
+
+### Fixed
+- Incorrect handling of `0` as a falsy energy value
+- Edge cases where days appeared “set up” without energy
+- Inconsistent totals when activities repeated many times
+- UI rendering before day data finished loading
+
+---
+
 ## [2.0.0] - 2024-12-19
 
 ### Added
-- **Activity Model Enhancement**
-  - Added optional `points` field to activity definitions (default point values)
-  - Added optional `unit` field to activities (e.g., 'km', 'minutes', 'sessions')
-  - Extended day data to support units per activity
-  - Backward compatible with existing saved data
-
-- **Intentional/Automatic Awareness Tracking**
-  - Added intentionality toggle when logging activities
-  - Track whether each activity instance was a choice or a habit
-  - UI prompt: "Was this a choice or a habit?"
-  - No defaults - user must choose consciously
-
-- **Morning Setup Improvements**
-  - Allow setting point values per activity for the day
-  - Optional unit input per activity
-  - Philosophical text: "You decide what nourishes you and what drains you."
-
-- **Reflection Enhancement**
-  - New reflection questions:
-    - "What energized me today?"
-    - "What drained me today?"
-    - "What did I observe about myself?"
-  - Added calm closure text: "Nobody will check this. Be honest with yourself."
-  - Removed judgmental language ("What You Did Right/Wrong")
-
-- **Review Screen Updates**
-  - Simplified weekly/monthly views - removed tables
-  - Added calm pattern observations (e.g., "Walking days often feel lighter.")
-  - No recommendations, no advice, no warnings
-  - Simple totals only
-
-- **UI/UX Improvements**
-  - Light/Dark mode support with system preference detection
-  - Smooth theme transitions
-  - Increased whitespace for calmer interface
-  - Softer typography and reduced visual noise
-  - Eye-friendly dark theme (deep, soft colors)
-  - Fixed theme toggle button (top-right)
-
-- **Philosophical UI Text**
-  - Home screen: "Nobody sees you. You are your own witness."
-  - Reflection screen: "Observation is enough."
-  - Activity Manager: Updated to reflect awareness focus
-  - Reset functionality: "You can reset anytime. Nothing is permanent."
-
-- **Docker Support**
-  - Multi-stage Dockerfile for production builds
-  - Nginx configuration for SPA routing
-  - Docker Compose file for easy deployment
-  - Health check endpoints
-
-- **Vercel Deployment**
-  - `vercel.json` configuration for Vercel deployment
-  - SPA routing configuration
-  - Static asset caching
-  - Security headers
-
-- **Documentation**
-  - Comprehensive README.md
-  - CHANGELOG.md for version tracking
-  - MIT License
+- Intentional/automatic awareness tracking
+- Morning setup for daily values
+- Reflection questions focused on observation
+- Weekly/monthly calm review screens
+- Light/Dark mode theming
+- Privacy-first local-only storage
+- Docker + Vercel deployment support
+- Comprehensive documentation
 
 ### Changed
-- **Data Model**
-  - Extended `DayData` type with `activityUnits` and `activityIntentionality`
-  - Extended `DayReflection` with new question fields
-  - Point calculation now falls back to activity defaults if day-specific not set
+- Removed judgmental language
+- Simplified UI and review screens
+- Neutralized terminology
 
-- **Point Calculation**
-  - Updated to support default points from activity definitions
-  - Backward compatible - old data still works
-
-- **UI Language**
-  - Removed judgmental terms ("good habits" vs "bad habits" still exist but less emphasized)
-  - Changed "Progress" to "Review"
-  - Changed "Manage Habits" to "Activities"
-  - More neutral, observational language throughout
-
-- **Review Screens**
-  - Removed detailed breakdowns
-  - Simplified to totals only
-  - Added pattern observations (derived from data, not recommendations)
-
-### Technical
-- Added theme context (`useTheme` hook)
-- Updated all calculation functions to accept activities parameter
-- Improved TypeScript types for intentionality tracking
-- Enhanced CSS with theme variables for light/dark modes
-- Improved mobile responsiveness
-
-### Fixed
-- Backward compatibility with old saved data
-- Null/undefined guards throughout
-- Data migration handled silently
+---
 
 ## [1.0.0] - Initial Release
 
 ### Added
 - Basic activity tracking
-- Good/bad habit tracking
-- Daily logging
-- Morning setup
-- Night reflection
-- Progress summary (weekly/monthly)
+- Daily logging and reflection
 - Activity management
 - Local storage persistence
-- Responsive design
+- Responsive UI
 
 ---
 
 ## Version History
 
-- **2.0.0** - Awareness-focused update with intentionality tracking, theme support, and philosophical updates
-- **1.0.0** - Initial release with basic tracking functionality
-
-
+- **2.1.0** — Energy-based awareness model with realistic human logic
+- **2.0.0** — Intentionality, themes, and philosophy-driven redesign
+- **1.0.0** — Initial release

@@ -1,4 +1,4 @@
-import { getWeeklyEnergy, getMonthlyEnergy, getAllDays } from '../../domain/storage/storage.aggregation';
+import { getWeeklyEnergy, getMonthlyEnergy } from '../../domain/storage/storage.aggregation';
 import { useAppState } from '../../domain/state/useAppState';
 import { useDayState } from '../../domain/state/useDayState';
 import { calculateDayEnergy, getEnergyGained, getEnergyDrained } from '../../domain/day/day.energy';

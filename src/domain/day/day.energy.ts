@@ -3,21 +3,12 @@ import type { ActivityId, ActivityDefinition } from '../activity/activity.types'
 
 /**
  * Energy calculation that considers:
- * - Time: Energy effects vary based on when activities occur
  * - Repetition: Multiple instances have different effects (first vs subsequent)
- * - Short-term vs long-term: Immediate energy vs cumulative effects
+ * - Intentionality: Intentional actions have slightly more positive impact
+ * - Time: Energy effects vary based on when activities occur (future enhancement)
  * 
  * Aim for high correctness, not fake precision.
  */
-
-interface EnergyCalculationContext {
-  activityId: ActivityId;
-  count: number;
-  baseEnergyPerInstance: number; // The base energy value per instance
-  activityType: 'good' | 'bad';
-  intentionality?: Array<'intentional' | 'automatic'>;
-  hourOfDay?: number; // 0-23, when activity was logged (optional)
-}
 
 /**
  * Calculate energy per activity instance with diminishing returns for repetition
@@ -25,8 +16,7 @@ interface EnergyCalculationContext {
  */
 function calculateInstanceEnergy(
   instanceIndex: number, // 0-based index
-  baseEnergy: number,
-  activityType: 'good' | 'bad'
+  baseEnergy: number
 ): number {
   if (instanceIndex === 0) {
     return baseEnergy;
@@ -36,28 +26,6 @@ function calculateInstanceEnergy(
   // This models real human energy patterns where repetition has less impact
   const multiplier = Math.pow(0.85, instanceIndex);
   return baseEnergy * multiplier;
-}
-
-/**
- * Time-based energy modifier
- * Energy activities are more effective at certain times
- * (e.g., morning exercise vs late night exercise)
- */
-function getTimeModifier(hourOfDay: number | undefined, activityType: 'good' | 'bad'): number {
-  if (hourOfDay === undefined) return 1.0;
-  
-  // For energy-gaining activities, morning has slightly more effect
-  if (activityType === 'good') {
-    // Morning (6-10): 1.1x, Day (10-17): 1.0x, Evening (17-22): 0.95x, Night (22-6): 0.9x
-    if (hourOfDay >= 6 && hourOfDay < 10) return 1.1;
-    if (hourOfDay >= 10 && hourOfDay < 17) return 1.0;
-    if (hourOfDay >= 17 && hourOfDay < 22) return 0.95;
-    return 0.9;
-  }
-  
-  // For energy-draining activities, timing matters less, but late night is slightly worse
-  if (hourOfDay >= 22 || hourOfDay < 6) return 1.05;
-  return 1.0;
 }
 
 /**
@@ -87,19 +55,18 @@ export function calculateActivityEnergy(
   const baseEnergyPerInstance = getActivityEnergyValue(day, activityId, activity);
   if (baseEnergyPerInstance === 0) return 0;
 
-  const activityType = activity?.type ?? 'good';
   const intentionalityArray = day.activityIntentionality?.[activityId] ?? [];
 
   let totalEnergy = 0;
   
   // Calculate energy for each instance
   for (let i = 0; i < count; i++) {
-    const instanceEnergy = calculateInstanceEnergy(i, baseEnergyPerInstance, activityType);
+    const instanceEnergy = calculateInstanceEnergy(i, baseEnergyPerInstance);
     const intentionality = intentionalityArray[i];
     const intentionalityMod = getIntentionalityModifier(intentionality);
     
-    // Time modifier would require storing timestamps - for now, skip it
-    // Future enhancement: store activity timestamps if needed
+    // Time modifier would require storing timestamps - future enhancement
+    // When implemented, could use activity type to adjust energy based on time of day
     
     totalEnergy += instanceEnergy * intentionalityMod;
   }
