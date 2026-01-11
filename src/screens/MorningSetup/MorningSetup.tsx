@@ -82,7 +82,40 @@ export function MorningSetup() {
     }));
   };
 
+  const ensureMagnitudesForDay = () => {
+    setDay(prev => {
+      if (!prev) return prev;
+      const overrides = { ...(prev.activityEnergyOverrides ?? {}) };
+      let updated = false;
+
+      activities.forEach(activity => {
+        if (overrides[activity.id] !== undefined) return;
+
+        const fallback =
+          activityEnergyOverrides[activity.id] ??
+          activity.energyMagnitude ??
+          (activity.points !== undefined ? Math.abs(activity.points) : undefined) ??
+          5;
+
+        if (fallback !== undefined) {
+          overrides[activity.id] = fallback;
+          updated = true;
+        }
+      });
+
+      if (!updated && prev.activityEnergyOverrides) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        activityEnergyOverrides: Object.keys(overrides).length > 0 ? overrides : undefined,
+      };
+    });
+  };
+
   const handleComplete = () => {
+    ensureMagnitudesForDay();
     navigate('/day');
   };
 

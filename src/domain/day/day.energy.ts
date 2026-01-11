@@ -151,12 +151,9 @@ export function isMorningSetupComplete(
   activities: ActivityDefinition[]
 ): boolean {
   if (activities.length === 0) return false;
+  if (!day.activityEnergyOverrides) return false;
 
-  return activities.every(activity => {
-    const override = day.activityEnergyOverrides?.[activity.id];
-    const defaultMagnitude = activity.energyMagnitude ?? activity.points;
-    return override !== undefined || defaultMagnitude !== undefined;
-  });
+  return activities.every(activity => day.activityEnergyOverrides![activity.id] !== undefined);
 }
 
 function determineDirection(activity?: ActivityDefinition): EnergyDirection {

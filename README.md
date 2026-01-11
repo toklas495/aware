@@ -5,11 +5,7 @@
 A privacy-first, self-awareness tracking application. Track your daily activities with intention and observe patterns without judgment.
 
 <div align="center">
-
-| Daily Log | Morning Setup | Reflection |
-| --- | --- | --- |
-| ![Daily Log](public/screens/daily-log.png) | ![Morning Setup](public/screens/morning-setup.png) | ![Reflection](public/screens/reflection.png) |
-
+	<img src="public/favicon.svg" alt="Aware logo" width="96" height="96" />
 </div>
 
 ## Philosophy
