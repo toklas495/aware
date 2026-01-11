@@ -8,12 +8,10 @@ export interface DayReflection {
 }
 
 /**
- * Energy values assigned to each activity for this day (set in morning)
- * Positive for activities that gain energy, negative for activities that drain energy
- * (Still called "activityPoints" in the data model for backward compatibility)
+ * Energy magnitude overrides assigned during morning setup (per activity, per day)
  */
-export interface ActivityPoints {
-  [activityId: string]: number;
+export interface ActivityEnergyOverrides {
+  [activityId: string]: number; // Always positive magnitude
 }
 
 /**
@@ -41,7 +39,7 @@ export interface ActivityIntentionality {
 export interface DayData {
   date: string; // YYYY-MM-DD (local, human time)
   intention?: string;
-  activityPoints?: ActivityPoints; // Energy values per activity (set in morning)
+  activityEnergyOverrides?: ActivityEnergyOverrides; // Day-specific magnitudes set in the morning
   activityUnits?: ActivityUnits; // Units per activity (optional, set in morning)
   activityCounts: ActivityCounts; // Count of times each activity was done
   activityIntentionality?: ActivityIntentionality; // Intentional/automatic tracking

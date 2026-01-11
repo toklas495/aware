@@ -1,8 +1,16 @@
 # Aware
 
+> **Energy mirror for your day** – log every action, see the balance, choose from awareness.
+
 A privacy-first, self-awareness tracking application. Track your daily activities with intention and observe patterns without judgment.
 
-> **"Nobody sees you. You are your own witness."**
+<div align="center">
+
+| Daily Log | Morning Setup | Reflection |
+| --- | --- | --- |
+| ![Daily Log](public/screens/daily-log.png) | ![Morning Setup](public/screens/morning-setup.png) | ![Reflection](public/screens/reflection.png) |
+
+</div>
 
 ## Philosophy
 
@@ -184,14 +192,16 @@ make docker-run     # Run Docker container
 ### Activity
 - `id`: Unique identifier
 - `label`: Display name
-- `type`: 'good' | 'bad'
-- `points`: Optional default point value
+- `type`: 'gain' | 'drain'
+- `energyMagnitude`: Optional default energy magnitude (always positive)
+- `intensity`: Optional descriptor ('light' | 'steady' | 'deep')
 - `unit`: Optional unit (e.g., 'km', 'minutes')
+- `points`: Legacy signed default retained for backward compatibility
 
 ### Day Data
 - `date`: YYYY-MM-DD format
 - `intention`: Optional daily intention
-- `activityPoints`: Points per activity for the day
+- `activityEnergyOverrides`: Energy magnitude overrides set during morning setup
 - `activityUnits`: Units per activity
 - `activityCounts`: Number of times each activity was done
 - `activityIntentionality`: Array of 'intentional' | 'automatic' per activity

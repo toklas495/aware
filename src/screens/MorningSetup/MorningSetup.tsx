@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useAppState } from '../../domain/state/useAppState';
 import { useDayState } from '../../domain/state/useDayState';
 import { getUserActivities } from '../../domain/activity/activity.config';
@@ -12,15 +12,11 @@ export function MorningSetup() {
   const navigate = useNavigate();
   const { today } = useAppState();
   const { day, setDay, isLoaded } = useDayState(today);
-  const [activities, setActivities] = useState<ActivityDefinition[]>([]);
-
-  useEffect(() => {
-    setActivities(getUserActivities());
-  }, []);
+  const [activities] = useState<ActivityDefinition[]>(() => getUserActivities());
 
   if (!isLoaded || !day) return null;
 
-  const activityPoints = day.activityPoints ?? {};
+  const activityEnergyOverrides = day.activityEnergyOverrides ?? {};
   const activityUnits = day.activityUnits ?? {};
 
   if (activities.length === 0) {
@@ -43,21 +39,22 @@ export function MorningSetup() {
     );
   }
 
-  const handlePointChange = (activityId: ActivityId, value: string) => {
-    const numValue = value === '' ? undefined : parseInt(value, 10);
-    if (numValue !== undefined && isNaN(numValue)) return;
+  const handleMagnitudeChange = (activityId: ActivityId, value: string) => {
+    const numValue = value === '' ? undefined : Number(value);
+    if (numValue !== undefined && Number.isNaN(numValue)) return;
+    const sanitized = numValue === undefined ? undefined : Math.abs(numValue);
 
     setDay(prev => {
       if (!prev) return prev;
-      const newPoints = { ...(prev.activityPoints ?? {}) };
-      if (numValue === undefined) {
-        delete newPoints[activityId];
+      const overrides = { ...(prev.activityEnergyOverrides ?? {}) };
+      if (sanitized === undefined) {
+        delete overrides[activityId];
       } else {
-        newPoints[activityId] = numValue;
+        overrides[activityId] = sanitized;
       }
       return {
         ...prev,
-        activityPoints: Object.keys(newPoints).length > 0 ? newPoints : undefined,
+        activityEnergyOverrides: Object.keys(overrides).length > 0 ? overrides : undefined,
       };
     });
   };
@@ -94,8 +91,21 @@ export function MorningSetup() {
       <AppHeader />
       <h2>Setup</h2>
       <p className="setup-description">
-        Set energy values for each activity. What gains energy, what drains it.
+        Set the energy magnitude for each activity. Gains add, drains subtract automatically.
       </p>
+
+      <div className="setup-cards">
+        <div className="setup-card">
+          <span className="card-label">Deposits</span>
+          <span className="card-value">{activities.filter(a => a.type === 'gain').length}</span>
+          <span className="card-hint">Activities that give energy</span>
+        </div>
+        <div className="setup-card">
+          <span className="card-label">Withdrawals</span>
+          <span className="card-value">{activities.filter(a => a.type === 'drain').length}</span>
+          <span className="card-hint">Activities that cost energy</span>
+        </div>
+      </div>
 
       <div className="intention-section">
         <label htmlFor="intention">Intention (optional)</label>
@@ -117,9 +127,10 @@ export function MorningSetup() {
                 <input
                   id={`points-${activity.id}`}
                   type="number"
-                  placeholder={activity.type === 'good' ? '+5' : '-5'}
-                  value={activityPoints[activity.id] ?? activity.points ?? ''}
-                  onChange={e => handlePointChange(activity.id, e.target.value)}
+                  min={0}
+                  placeholder="5"
+                  value={activityEnergyOverrides[activity.id] ?? activity.energyMagnitude ?? ''}
+                  onChange={e => handleMagnitudeChange(activity.id, e.target.value)}
                   className="points-input"
                 />
                 <input

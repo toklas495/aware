@@ -21,7 +21,7 @@ export function getAllDays(): DayData[] {
     
     // Only include days that have been started (have activity counts or are completed)
     const hasCounts = day.activityCounts && Object.keys(day.activityCounts).length > 0;
-    if (hasCounts || day.completed || day.activityPoints) {
+    if (hasCounts || day.completed || day.activityEnergyOverrides) {
       days.push(day);
     }
   }

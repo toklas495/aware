@@ -4,9 +4,19 @@
 export type ActivityId = string;
 
 /**
- * Activity type: gains energy (good) or drains energy (bad)
+ * Energy direction: deposit (gain) or withdrawal (drain)
  */
-export type ActivityType = 'good' | 'bad';
+export type EnergyDirection = 'gain' | 'drain';
+
+/**
+ * Activity type mirrors the energy direction for clarity
+ */
+export type ActivityType = EnergyDirection;
+
+/**
+ * Optional descriptor for how intense an activity feels
+ */
+export type ActivityIntensity = 'light' | 'steady' | 'deep';
 
 /**
  * Whether an activity instance was intentional or automatic
@@ -29,8 +39,10 @@ export interface ActivityDefinition {
   id: ActivityId;
   label: string;
   type: ActivityType;
-  pairId?: ActivityId; // ID of the opposite activity (good <-> bad)
-  // New fields (backward compatible - optional)
-  points?: number; // Default energy value per instance (can be overridden per day). Positive for good, negative for bad.
+  pairId?: ActivityId; // ID of the opposite activity (gain <-> drain)
+  energyMagnitude?: number; // Positive magnitude per instance (direction handled by `type`)
+  intensity?: ActivityIntensity; // Optional feel/scaling descriptor
   unit?: string; // Optional unit (e.g., 'km', 'minutes', 'sessions')
+  /** @deprecated - legacy signed value retained for migration */
+  points?: number;
 }

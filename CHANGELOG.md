@@ -59,8 +59,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Automatically shows “Log activity” on the next day
 
 - **Data Model**
-  - Added `activityEnergy` to `DayData`
-  - Legacy fields (`activityPoints`) still supported
+  - Added `activityEnergyOverrides` to `DayData`
+  - Legacy fields (`activityPoints`) migrated automatically
   - Improved guards for corrupted or partial local data
 
 - **Calculation Architecture**

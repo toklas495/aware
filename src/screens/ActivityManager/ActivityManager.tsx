@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import type { ActivityDefinition } from '../../domain/activity/activity.types';
+import { useState } from 'react';
+import type { ActivityDefinition, ActivityType } from '../../domain/activity/activity.types';
 import {
   loadUserActivities,
   addActivity,
@@ -10,23 +10,19 @@ import { AppHeader } from '../../components/AppHeader';
 import './ActivityManager.css';
 
 export function ActivityManager() {
-  const [activities, setActivities] = useState<ActivityDefinition[]>([]);
+  const [activities, setActivities] = useState<ActivityDefinition[]>(() => loadUserActivities());
   const [newActivityLabel, setNewActivityLabel] = useState('');
-  const [newActivityType, setNewActivityType] = useState<'good' | 'bad'>('good');
+  const [newActivityType, setNewActivityType] = useState<ActivityType>('gain');
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingLabel, setEditingLabel] = useState('');
-  const [editingType, setEditingType] = useState<'good' | 'bad'>('good');
-
-  useEffect(() => {
-    setActivities(loadUserActivities());
-  }, []);
+  const [editingType, setEditingType] = useState<ActivityType>('gain');
 
   const handleAdd = () => {
     if (!newActivityLabel.trim()) return;
     addActivity(newActivityLabel, newActivityType);
     setActivities(loadUserActivities());
     setNewActivityLabel('');
-    setNewActivityType('good');
+    setNewActivityType('gain');
   };
 
   const handleDelete = (id: string) => {
@@ -48,17 +44,17 @@ export function ActivityManager() {
     setActivities(loadUserActivities());
     setEditingId(null);
     setEditingLabel('');
-    setEditingType('good');
+    setEditingType('gain');
   };
 
   const handleCancelEdit = () => {
     setEditingId(null);
     setEditingLabel('');
-    setEditingType('good');
+    setEditingType('gain');
   };
 
-  const goodActivities = activities.filter(a => a.type === 'good');
-  const badActivities = activities.filter(a => a.type === 'bad');
+  const gainActivities = activities.filter(a => a.type === 'gain');
+  const drainActivities = activities.filter(a => a.type === 'drain');
 
   return (
     <div className="activity-manager">
@@ -80,11 +76,11 @@ export function ActivityManager() {
           />
           <select
             value={newActivityType}
-            onChange={e => setNewActivityType(e.target.value as 'good' | 'bad')}
+            onChange={e => setNewActivityType(e.target.value as ActivityType)}
             className="type-select"
           >
-            <option value="good">Gains energy</option>
-            <option value="bad">Drains energy</option>
+            <option value="gain">Gains energy</option>
+            <option value="drain">Drains energy</option>
           </select>
           <button onClick={handleAdd} className="add-button">
             Add
@@ -95,10 +91,10 @@ export function ActivityManager() {
       <div className="activities-sections">
         <div className="activity-section">
           <h3>Gains energy</h3>
-          {goodActivities.length === 0 ? (
+          {gainActivities.length === 0 ? (
             <p className="empty-state">None yet</p>
           ) : (
-            goodActivities.map(activity => (
+            gainActivities.map(activity => (
               <ActivityItem
                 key={activity.id}
                 activity={activity}
@@ -118,10 +114,10 @@ export function ActivityManager() {
 
         <div className="activity-section">
           <h3>Drains energy</h3>
-          {badActivities.length === 0 ? (
+          {drainActivities.length === 0 ? (
             <p className="empty-state">None yet</p>
           ) : (
-            badActivities.map(activity => (
+            drainActivities.map(activity => (
               <ActivityItem
                 key={activity.id}
                 activity={activity}
@@ -148,13 +144,13 @@ interface ActivityItemProps {
   activity: ActivityDefinition;
   editingId: string | null;
   editingLabel: string;
-  editingType: 'good' | 'bad';
+  editingType: ActivityType;
   onStartEdit: (activity: ActivityDefinition) => void;
   onSaveEdit: (id: string) => void;
   onCancelEdit: () => void;
   onDelete: (id: string) => void;
   setEditingLabel: (label: string) => void;
-  setEditingType: (type: 'good' | 'bad') => void;
+  setEditingType: (type: ActivityType) => void;
 }
 
 function ActivityItem({
@@ -188,11 +184,11 @@ function ActivityItem({
           />
           <select
             value={editingType}
-            onChange={e => setEditingType(e.target.value as 'good' | 'bad')}
+            onChange={e => setEditingType(e.target.value as ActivityType)}
             className="type-select-small"
           >
-            <option value="good">Gains</option>
-            <option value="bad">Drains</option>
+            <option value="gain">Gains</option>
+            <option value="drain">Drains</option>
           </select>
           <button onClick={() => onSaveEdit(activity.id)} className="save-button">
             Save

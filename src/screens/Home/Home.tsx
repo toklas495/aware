@@ -15,10 +15,7 @@ export function Home() {
   if (!isLoaded || !day) return null;
 
   const activities = getUserActivities();
-  const hasMorningSetup = isMorningSetupComplete(
-    day,
-    activities.map(a => a.id)
-  );
+  const hasMorningSetup = isMorningSetupComplete(day, activities);
   
   const totalEnergy = calculateDayEnergy(day, activities);
   const energyGained = getEnergyGained(day, activities);
@@ -43,7 +40,7 @@ export function Home() {
         activityCounts: {},
         reflection: undefined,
         completed: false,
-        activityPoints: undefined,
+        activityEnergyOverrides: undefined,
         activityUnits: undefined,
         activityIntentionality: undefined,
         intention: undefined,

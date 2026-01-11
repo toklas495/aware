@@ -10,6 +10,7 @@ export function useDayState(date: string) {
   // Load once per date
   useEffect(() => {
     const existingDay = loadDay(date);
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- syncing localStorage data into React state
     setDay(existingDay ?? createNewDay(date));
     setIsLoaded(true);
   }, [date]);

@@ -83,11 +83,11 @@
   color: var(--text-primary);
 }
 
-.activity-good {
+.activity-gain {
   color: var(--text-primary);
 }
 
-.activity-bad {
+.activity-drain {
   color: var(--text-secondary);
 }
 

@@ -5,7 +5,7 @@
 import type { DayData } from './day.types';
 import type { ActivityId, ActivityDefinition } from '../activity/activity.types';
 import {
-  getActivityEnergyValue,
+  getActivityEnergyMagnitude,
   calculateDayEnergy,
   getActivityCount,
   isMorningSetupComplete,
@@ -14,14 +14,14 @@ import {
 } from './day.energy';
 
 /**
- * @deprecated Use getActivityEnergyValue instead
+ * @deprecated Use getActivityEnergyMagnitude instead
  */
 export function getActivityPointValue(
   day: DayData,
   activityId: ActivityId,
   activity?: ActivityDefinition
 ): number {
-  return getActivityEnergyValue(day, activityId, activity);
+  return getActivityEnergyMagnitude(day, activityId, activity);
 }
 
 /**

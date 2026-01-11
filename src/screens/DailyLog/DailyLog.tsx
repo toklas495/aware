@@ -1,10 +1,17 @@
 import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { getUserActivities } from '../../domain/activity/activity.config';
 import type { ActivityDefinition, ActivityIntentionality } from '../../domain/activity/activity.types';
 import { useAppState } from '../../domain/state/useAppState';
 import { useDayState } from '../../domain/state/useDayState';
-import { getActivityEnergyValue, getActivityCount, calculateActivityEnergy } from '../../domain/day/day.energy';
+import {
+  getActivityEnergyMagnitude,
+  getActivityCount,
+  calculateActivityEnergy,
+  calculateDayEnergy,
+  getEnergyDrained,
+  getEnergyGained,
+} from '../../domain/day/day.energy';
 import { AppHeader } from '../../components/AppHeader';
 import './DailyLog.css';
 
@@ -12,17 +19,23 @@ export function DailyLog() {
   const navigate = useNavigate();
   const { today } = useAppState();
   const { day, setDay, isLoaded } = useDayState(today);
-  const [activities, setActivities] = useState<ActivityDefinition[]>([]);
+  const [activities] = useState<ActivityDefinition[]>(() => getUserActivities());
   const [pendingIntentionality, setPendingIntentionality] = useState<{
     activityId: string;
     intentionality: ActivityIntentionality | null;
   } | null>(null);
 
-  useEffect(() => {
-    setActivities(getUserActivities());
-  }, []);
-
   if (!isLoaded || !day) return null;
+
+  const hasLoggedActivities = Object.values(day.activityCounts ?? {}).some(count => count > 0);
+
+  const energyTotals = hasLoggedActivities
+    ? {
+        gained: getEnergyGained(day, activities),
+        drained: getEnergyDrained(day, activities),
+        net: calculateDayEnergy(day, activities),
+      }
+    : { gained: 0, drained: 0, net: 0 };
 
   if (activities.length === 0) {
     return (
@@ -41,6 +54,17 @@ export function DailyLog() {
       </div>
     );
   }
+
+  const formatMagnitude = (value: number): string => {
+    const normalized = Number.isInteger(value) ? value : Math.round(value * 100) / 100;
+    return normalized.toString();
+  };
+
+  const formatSignedEnergy = (value: number): string => {
+    if (value > 0) return `+${formatMagnitude(value)}`;
+    if (value < 0) return `-${formatMagnitude(Math.abs(value))}`;
+    return '0';
+  };
 
   const handleIncrement = (activityId: string, skipIntentionality = false) => {
     if (!day) return;
@@ -73,7 +97,7 @@ export function DailyLog() {
       // First time - show intentionality prompt
       setPendingIntentionality({
         activityId,
-        intentionality: null,
+        intentionality: null
       });
     } else {
       // Already logged - increment immediately with same intentionality as last
@@ -161,10 +185,11 @@ export function DailyLog() {
 
   const renderActivity = (activity: ActivityDefinition) => {
     const count = getActivityCount(day, activity.id);
-    const baseEnergyPerInstance = getActivityEnergyValue(day, activity.id, activity);
+    const baseEnergyPerInstance = getActivityEnergyMagnitude(day, activity.id, activity);
     const totalEnergy = calculateActivityEnergy(day, activity.id, activity);
     const unit = day.activityUnits?.[activity.id] ?? activity.unit ?? '';
     const isPending = pendingIntentionality?.activityId === activity.id;
+    const directionSymbol = activity.type === 'drain' ? '−' : '+';
 
     return (
       <div key={activity.id} className="activity-log-item">
@@ -172,7 +197,7 @@ export function DailyLog() {
           <span className="activity-name">{activity.label}</span>
           {baseEnergyPerInstance !== 0 && (
             <span className="energy-per-instance">
-              {baseEnergyPerInstance > 0 ? '+' : ''}{baseEnergyPerInstance}
+              {directionSymbol}{formatMagnitude(baseEnergyPerInstance)}
               {unit && ` / ${unit}`}
             </span>
           )}
@@ -232,8 +257,8 @@ export function DailyLog() {
         </div>
         
         {count > 0 && totalEnergy !== 0 && (
-          <div className={`activity-energy ${activity.type === 'bad' ? 'energy-drained' : 'energy-gained'}`}>
-            {totalEnergy > 0 ? '+' : ''}{totalEnergy % 1 === 0 ? totalEnergy : Math.round(totalEnergy * 100) / 100}
+          <div className={`activity-energy ${activity.type === 'drain' ? 'energy-drained' : 'energy-gained'}`}>
+            {formatSignedEnergy(totalEnergy)}
           </div>
         )}
       </div>
@@ -245,6 +270,26 @@ export function DailyLog() {
       <AppHeader />
       <h2>Log</h2>
 
+      {hasLoggedActivities && (
+        <div className="log-energy-summary" aria-live="polite">
+          <div className="summary-card gain">
+            <span className="summary-label">Gained</span>
+            <span className="summary-value">{formatSignedEnergy(energyTotals.gained)}</span>
+            <span className="summary-subtext">Deposits today</span>
+          </div>
+          <div className="summary-card drain">
+            <span className="summary-label">Drained</span>
+            <span className="summary-value">{formatSignedEnergy(-energyTotals.drained)}</span>
+            <span className="summary-subtext">Withdrawals today</span>
+          </div>
+          <div className="summary-card net">
+            <span className="summary-label">Balance</span>
+            <span className="summary-value">{formatSignedEnergy(energyTotals.net)}</span>
+            <span className="summary-subtext">Energy mirror</span>
+          </div>
+        </div>
+      )}
+
       <div className="activity-list">
         {activities.map(renderActivity)}
       </div>
@@ -253,7 +298,7 @@ export function DailyLog() {
         <button onClick={() => navigate('/')} className="secondary-button">
           Back
         </button>
-        {(Object.keys(day.activityCounts ?? {}).length > 0) && (
+        {hasLoggedActivities && (
           <button onClick={() => navigate('/reflection')} className="primary-button">
             Reflect
           </button>

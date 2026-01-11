@@ -1,5 +1,5 @@
 import type { DayData } from './day.types';
-import type { ActivityId, ActivityDefinition } from '../activity/activity.types';
+import type { ActivityId, ActivityDefinition, EnergyDirection } from '../activity/activity.types';
 
 /**
  * Energy calculation that considers:
@@ -21,57 +21,69 @@ export function calculateActivityEnergy(
   const count = day.activityCounts?.[activityId] ?? 0;
   if (count === 0) return 0;
 
-  // Get base energy per instance (still called "points" in data model for backward compatibility)
-  const baseEnergyPerInstance = getActivityEnergyValue(day, activityId, activity);
-  if (baseEnergyPerInstance === 0) return 0;
+  const { magnitude, direction } = getActivityEnergyDescriptor(day, activityId, activity);
+  if (magnitude === 0) return 0;
 
-  // Simple calculation: count * baseEnergy
-  let totalEnergy = count * baseEnergyPerInstance;
+  let totalMagnitude = count * magnitude;
 
-  // Apply intentionality modifier if tracking intentionality
-  // Intentional actions get 5% boost (if we have intentionality data)
   const intentionalityArray = day.activityIntentionality?.[activityId];
   if (intentionalityArray && intentionalityArray.length === count && intentionalityArray.length > 0) {
-    // Count how many were intentional
     const intentionalCount = intentionalityArray.filter(i => i === 'intentional').length;
     const automaticCount = count - intentionalCount;
-    
+
     if (intentionalCount > 0) {
-      if (baseEnergyPerInstance > 0) {
-        // For positive energy, intentional gets 5% boost
-        const intentionalEnergy = intentionalCount * baseEnergyPerInstance * 1.05;
-        const automaticEnergy = automaticCount * baseEnergyPerInstance;
-        totalEnergy = intentionalEnergy + automaticEnergy;
-      } else if (baseEnergyPerInstance < 0) {
-        // For negative energy (draining), intentional reduces the drain by 5%
-        const intentionalEnergy = intentionalCount * baseEnergyPerInstance * 0.95;
-        const automaticEnergy = automaticCount * baseEnergyPerInstance;
-        totalEnergy = intentionalEnergy + automaticEnergy;
-      }
+      const intentionalMultiplier = direction === 'gain' ? 1.05 : 0.95;
+      const automaticMultiplier = 1;
+
+      const intentionalEnergy = intentionalCount * magnitude * intentionalMultiplier;
+      const automaticEnergy = automaticCount * magnitude * automaticMultiplier;
+      totalMagnitude = intentionalEnergy + automaticEnergy;
     }
   }
 
-  return totalEnergy;
+  const directionMultiplier = direction === 'gain' ? 1 : -1;
+  return totalMagnitude * directionMultiplier;
 }
 
 /**
- * Get energy value per activity instance
+ * Get energy magnitude per activity instance (always positive)
  * Checks day-specific energy first, then falls back to activity default
  */
-export function getActivityEnergyValue(
+export function getActivityEnergyMagnitude(
   day: DayData,
   activityId: ActivityId,
   activity?: ActivityDefinition
 ): number {
-  // Day-specific energy takes precedence (still using activityPoints for backward compatibility)
-  if (day.activityPoints?.[activityId] !== undefined) {
-    return day.activityPoints[activityId];
+  if (day.activityEnergyOverrides?.[activityId] !== undefined) {
+    return Math.abs(day.activityEnergyOverrides[activityId]);
   }
-  // Fall back to activity default
+
+  if (activity?.energyMagnitude !== undefined) {
+    return Math.abs(activity.energyMagnitude);
+  }
+
   if (activity?.points !== undefined) {
-    return activity.points;
+    return Math.abs(activity.points);
   }
+
   return 0;
+}
+
+export interface ActivityEnergyDescriptor {
+  magnitude: number;
+  direction: EnergyDirection;
+}
+
+export function getActivityEnergyDescriptor(
+  day: DayData,
+  activityId: ActivityId,
+  activity?: ActivityDefinition
+): ActivityEnergyDescriptor {
+  const magnitude = getActivityEnergyMagnitude(day, activityId, activity);
+  return {
+    magnitude,
+    direction: determineDirection(activity),
+  };
 }
 
 /**
@@ -101,7 +113,7 @@ export function getEnergyGained(day: DayData, activities: ActivityDefinition[]):
   if (!day.activityCounts) return 0;
   
   return activities
-    .filter(a => a.type === 'good')
+    .filter(a => a.type === 'gain')
     .reduce((total, activity) => {
       const energy = calculateActivityEnergy(day, activity.id, activity);
       return total + Math.max(0, energy); // Only positive energy
@@ -115,7 +127,7 @@ export function getEnergyDrained(day: DayData, activities: ActivityDefinition[])
   if (!day.activityCounts) return 0;
   
   const drained = activities
-    .filter(a => a.type === 'bad')
+    .filter(a => a.type === 'drain')
     .reduce((total, activity) => {
       const energy = calculateActivityEnergy(day, activity.id, activity);
       return total + Math.min(0, energy); // Only negative energy
@@ -136,8 +148,18 @@ export function getActivityCount(day: DayData, activityId: ActivityId): number {
  */
 export function isMorningSetupComplete(
   day: DayData,
-  activityIds: ActivityId[]
+  activities: ActivityDefinition[]
 ): boolean {
-  if (!day.activityPoints) return false;
-  return activityIds.every(id => day.activityPoints![id] !== undefined);
+  if (activities.length === 0) return false;
+
+  return activities.every(activity => {
+    const override = day.activityEnergyOverrides?.[activity.id];
+    const defaultMagnitude = activity.energyMagnitude ?? activity.points;
+    return override !== undefined || defaultMagnitude !== undefined;
+  });
+}
+
+function determineDirection(activity?: ActivityDefinition): EnergyDirection {
+  if (activity?.type === 'drain') return 'drain';
+  return 'gain';
 }
